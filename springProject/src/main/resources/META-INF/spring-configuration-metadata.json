@@ -1,0 +1,34 @@
+{
+  "hints": [
+    {
+      "name": "auto.name",
+      "values": [
+        {
+          "value": "lisi"
+        },
+        { "value": "wangwu"
+        }
+      ]
+    }
+  ],
+  "groups": [
+    {
+      "sourceType": "com.spring.config.AutoProperties",
+      "name": "auto",
+      "type": "com.spring.config.AutoProperties"
+    }
+  ],
+  "properties": [
+    {
+      "sourceType": "com.spring.config.AutoProperties",
+      "name": "auto.age",
+      "type": "java.lang.Integer"
+    },
+    {
+      "sourceType": "com.spring.config.AutoProperties",
+      "defaultValue": "zhangshan",
+      "name": "auto.name",
+      "type": "java.lang.String"
+    }
+  ]
+}
