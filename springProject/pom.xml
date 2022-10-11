@@ -14,24 +14,30 @@
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
+        <spring-boot-stater.version>2.0.4.RELEASE</spring-boot-stater.version>
+        <mysql.version>8.0.20</mysql.version>
+        <mybatis.plus.version>3.5.2</mybatis.plus.version>
+        <druid.version>1.2.6</druid.version>
+        <freemarker.version>2.3.31</freemarker.version>
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter</artifactId>
-            <version>2.0.4.RELEASE</version>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.springframework.boot</groupId>-->
+            <!--<artifactId>spring-boot-starter</artifactId>-->
+            <!--<version>${}</version>-->
+        <!--</dependency>-->
 
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>8.0.20</version>
+            <version>${mysql.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+            <version>${spring-boot-stater.version}</version>
         </dependency>
 
         <dependency>
@@ -44,38 +50,32 @@
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-core</artifactId>
-            <version>3.5.2</version>
+            <version>${mybatis.plus.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-boot-starter</artifactId>
-            <version>3.5.2</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>druid</artifactId>
-            <version>1.1.12</version>
+            <version>${mybatis.plus.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>druid-spring-boot-starter</artifactId>
-            <version>1.2.6</version>
+            <version>${druid.version}</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/com.baomidou/mybatis-plus-generator -->
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-generator</artifactId>
-            <version>3.5.2</version>
+            <version>${mybatis.plus.version}</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.freemarker/freemarker -->
         <dependency>
             <groupId>org.freemarker</groupId>
             <artifactId>freemarker</artifactId>
-            <version>2.3.31</version>
+            <version>${freemarker.version}</version>
         </dependency>
     </dependencies>
 </project>
