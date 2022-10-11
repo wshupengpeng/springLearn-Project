@@ -16,6 +16,7 @@
         <module>workTemplate</module>
         <module>springProject</module>
         <module>spring-cloud-gateway</module>
+        <module>maven-Archetype-Demo</module>
     </modules>
 
     <properties>
