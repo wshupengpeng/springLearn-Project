@@ -1,4 +1,6 @@
-package com.spring.excel;
+package com.spring.excel.annotation;
+
+import com.spring.excel.enums.ExportModeEnum;
 
 import java.lang.annotation.*;
 
@@ -15,4 +17,11 @@ public @interface ExportExcel {
      * @return
      */
     Class<?> beanClass();
+
+    String fileName();
+
+    String sheetName() default "sheet";
+
+    ExportModeEnum mode() default ExportModeEnum.NORMAL;
+
 }
