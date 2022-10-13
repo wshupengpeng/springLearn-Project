@@ -9,7 +9,7 @@ import java.lang.annotation.*;
  */
 @Target(ElementType.FIELD)
 @Documented
-@Retention(RetentionPolicy.CLASS)
+@Retention(RetentionPolicy.RUNTIME)
 public @interface ExportSubSelection {
     SubSelectionEnum mark();
 

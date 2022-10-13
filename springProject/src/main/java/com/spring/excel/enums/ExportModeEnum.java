@@ -8,7 +8,11 @@ public enum ExportModeEnum {
     /**
      * 分段模式，即可以进行分页查询导出
      */
-    SUBSELECTION
+    SUBSELECTION,
+    /**
+     *  自定义模式
+     */
+    CUSTOMIZER
     ;
 
 }

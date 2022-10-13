@@ -7,12 +7,14 @@ import com.alibaba.excel.write.style.column.SimpleColumnWidthStyleStrategy;
 import com.spring.excel.support.AbstractExcelPostProcessor;
 import com.spring.excel.support.AnnotationDefintion;
 import org.apache.poi.ss.usermodel.IndexedColors;
+import org.springframework.stereotype.Component;
 
 /**
  * @Description
  * @Author 01415355
  * @Date 2022/10/12 16:02
  */
+@Component
 public class NormalExcelPostProcessor extends AbstractExcelPostProcessor {
 
     @Override

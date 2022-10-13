@@ -2,8 +2,8 @@ package com.spring.excel.support.interfaces;
 
 import com.spring.excel.support.AnnotationDefintion;
 
-public interface ExcelParser {
+public interface ExcelExecutorRuler {
 
-    ExcelExecutor parse(AnnotationDefintion defintion);
+    ExcelExecutor match(AnnotationDefintion defintion);
 
 }

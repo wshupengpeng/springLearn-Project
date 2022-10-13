@@ -10,7 +10,7 @@ import java.lang.annotation.*;
  */
 @Target(ElementType.METHOD)
 @Documented
-@Retention(RetentionPolicy.CLASS)
+@Retention(RetentionPolicy.RUNTIME)
 public @interface ExportExcel {
     /**
      *  需要导出实体类
