@@ -9,4 +9,6 @@ public @interface ExportField {
     String name();
 
     int order();
+
+    String format() default "yyyy-MM-dd HH:mm:ss";
 }
