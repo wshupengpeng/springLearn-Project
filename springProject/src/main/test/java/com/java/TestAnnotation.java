@@ -1,6 +1,10 @@
 package com.java;
 
+import org.junit.Test;
+
 import java.lang.annotation.*;
+import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 
 /**
  * @Description: 测试通过父注解类型能否拿到子注解类型
@@ -25,6 +29,31 @@ public class TestAnnotation {
         }
     }
 
+    public void test(@ParamterType String str){
+
+    }
+
+    @Test
+    public void searchParamterAnnotation(){
+        Method[] methods = TestAnnotation.class.getMethods();
+        for (Method method : methods) {
+            if(method.getName().equals("test")){
+                Parameter[] parameters = method.getParameters();
+                for (Parameter parameter : parameters) {
+                    Annotation[] annotations = parameter.getAnnotations();
+                    for (Annotation annotation : annotations) {
+                        if(annotation.annotationType() == ParamterType.class){
+                            Class<?> type = parameter.getType();
+                            System.out.println(type.isPrimitive());
+                            System.out.println(parameter);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
     public static void searchAnnotation(Class<?> clz, Class<?> targetAnnotation){
         Annotation[] annotations = clz.getAnnotations();
         for (Annotation annotation : annotations) {
@@ -33,6 +62,13 @@ public class TestAnnotation {
     }
 
 
+
+}
+
+@Target(ElementType.PARAMETER)
+@Documented
+@Retention(RetentionPolicy.RUNTIME)
+@interface ParamterType{
 
 }
 

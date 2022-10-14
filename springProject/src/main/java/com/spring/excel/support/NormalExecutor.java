@@ -1,17 +1,24 @@
 package com.spring.excel.support;
 
+import com.alibaba.excel.EasyExcel;
+import com.alibaba.excel.ExcelWriter;
+import com.alibaba.excel.write.builder.ExcelWriterBuilder;
+import com.alibaba.excel.write.metadata.WriteSheet;
 import com.spring.excel.annotation.ExportField;
+import com.spring.excel.pojo.FieldEntity;
 import com.spring.excel.support.interfaces.ExcelExecutor;
-import org.aspectj.lang.JoinPoint;
+import com.spring.excel.utils.ExcelUtils;
+import com.spring.excel.utils.HttpServletHolderUtil;
+import com.spring.excel.utils.ResponseUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
+import org.jetbrains.annotations.NotNull;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -27,54 +34,37 @@ public class NormalExecutor implements ExcelExecutor {
         try {
             Object proceed = jp.proceed();
             if(proceed instanceof List){
-                List<FieldEntity> parse = parse(returnType);
-                List<FieldEntity> sortedFieldList = parse.stream()
-                        .sorted(Comparator.comparing(FieldEntity::getOrder)).collect(Collectors.toList());
+                List<FieldEntity> parse = ExcelUtils.parseHead(returnType);
+                List<List<String>> headList = parse.stream()
+                        .map(field->Arrays.asList(field.getName()))
+                        .collect(Collectors.toList());
                 List list = (List) proceed;
-                List<List<String>> dataList= new ArrayList<>();
-                for (Object o : list) {
-                    Field[] declaredFields = o.getClass().getDeclaredFields();
-                    List<String> row = new ArrayList<>();
-                    for (FieldEntity fieldEntity : sortedFieldList) {
-                        for (Field declaredField : declaredFields) {
-                            declaredField.setAccessible(true);
-                            String strValue = "";
-                            if(declaredField.getName().equals(fieldEntity.getFieldName())){
-                                Object value = declaredField.get(o);
-                                if(value instanceof Date){
-                                    strValue = new SimpleDateFormat(fieldEntity.getFormat()).format((Date) value);
-                                }else{
-                                    strValue = value.toString();
-                                }
-                            }
-                            row.add(strValue);
-                        }
-                    }
-                    dataList.add(row);
-                }
+                List<List<String>> dataList = ExcelUtils.parseData(list, parse);
+                writeToExcel(defintion, headList, dataList);
             }
         } catch (Throwable e) {
             e.printStackTrace();
         }
     }
 
-    private List<FieldEntity> parse(Class<?> returnType) {
-        Field[] declaredFields = returnType.getDeclaredFields();
-        List<FieldEntity> fieldEntityList = new ArrayList<>();
-        for (Field declaredField : declaredFields) {
-            Annotation[] annotations = declaredField.getAnnotations();
-            for (Annotation annotation : annotations) {
-                if(annotation.getClass() == ExportField.class){
-                    ExportField exportField = (ExportField) annotation;
-                    FieldEntity fieldEntity = new FieldEntity();
-                    fieldEntity.setName(exportField.name());
-                    fieldEntity.setOrder(exportField.order());
-                    fieldEntity.setFieldName(declaredField.getName());
-                    fieldEntity.setFormat(exportField.format());
-                    fieldEntityList.add(fieldEntity);
-                }
-            }
+    @NotNull
+    private void writeToExcel(AnnotationDefintion defintion, List<List<String>> headList,
+                              List<List<String>> dataList) throws IOException {
+        ExcelWriter writer = null;
+        try {
+            HttpServletResponse response = HttpServletHolderUtil.getHttpServletResponse();
+            ResponseUtils.setExcelResponseHead(response, defintion.getExportAnnotation().fileName());
+            ExcelWriterBuilder writerBuilder = EasyExcel.write(response.getOutputStream())
+                    .head(headList);
+            defintion.getWriteHandlerList().forEach(writerBuilder::registerWriteHandler);
+            writer = writerBuilder.build();
+            WriteSheet writeSheet = new WriteSheet();
+            writeSheet.setSheetNo(0);
+            writeSheet.setSheetName(defintion.getExportAnnotation().sheetName());
+            writer.write(dataList,writeSheet);
+        }finally {
+            if(writer != null) writer.finish();
         }
-        return fieldEntityList;
     }
+
 }
