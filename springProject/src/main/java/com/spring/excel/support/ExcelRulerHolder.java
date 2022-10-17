@@ -16,7 +16,7 @@ public class ExcelRulerHolder{
     @Autowired
     private ApplicationContext applicationContext;
 
-    public ExcelExecutor match(AnnotationDefintion defintion){
+    public ExcelExecutor match(AnnotationDefinition defintion){
         switch (defintion.getExportAnnotation().mode()){
             case NORMAL: return applicationContext.getBean(NormalExecutor.class);
             case SUBSELECTION: return applicationContext.getBean(SubselectionExecutor.class);

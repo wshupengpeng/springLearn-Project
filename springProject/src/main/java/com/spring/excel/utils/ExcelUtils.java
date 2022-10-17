@@ -6,10 +6,7 @@ import com.spring.excel.pojo.FieldEntity;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -19,7 +16,7 @@ import java.util.stream.Collectors;
  */
 public class ExcelUtils {
 
-    public static List<List<String>> parseData(List<Object> list, List<FieldEntity> sortedFieldList) {
+    public static List<List<String>> parseData(Collection<Object> list, List<FieldEntity> sortedFieldList) {
         List<List<String>> dataList= new ArrayList<>();
         for (Object o : list) {
             Field[] declaredFields = o.getClass().getDeclaredFields();

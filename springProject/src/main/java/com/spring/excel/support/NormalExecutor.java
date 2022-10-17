@@ -4,7 +4,6 @@ import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.ExcelWriter;
 import com.alibaba.excel.write.builder.ExcelWriterBuilder;
 import com.alibaba.excel.write.metadata.WriteSheet;
-import com.spring.excel.annotation.ExportField;
 import com.spring.excel.pojo.FieldEntity;
 import com.spring.excel.support.interfaces.ExcelExecutor;
 import com.spring.excel.utils.ExcelUtils;
@@ -15,9 +14,6 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -28,7 +24,7 @@ import java.util.stream.Collectors;
  */
 public class NormalExecutor implements ExcelExecutor {
     @Override
-    public void execute(AnnotationDefintion defintion) {
+    public void execute(AnnotationDefinition defintion) {
         Class<?> returnType = defintion.getExportAnnotation().beanClass();
         ProceedingJoinPoint jp = (ProceedingJoinPoint) defintion.getJp();
         try {
@@ -48,7 +44,7 @@ public class NormalExecutor implements ExcelExecutor {
     }
 
     @NotNull
-    private void writeToExcel(AnnotationDefintion defintion, List<List<String>> headList,
+    private void writeToExcel(AnnotationDefinition defintion, List<List<String>> headList,
                               List<List<String>> dataList) throws IOException {
         ExcelWriter writer = null;
         try {

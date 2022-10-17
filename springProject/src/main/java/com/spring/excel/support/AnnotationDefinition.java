@@ -16,7 +16,7 @@ import java.util.Optional;
  * @Date 2022/10/12 15:23
  */
 @Data
-public class AnnotationDefintion {
+public class AnnotationDefinition {
 
     private JoinPoint jp;
 
@@ -26,11 +26,11 @@ public class AnnotationDefintion {
 
     private List<WriteHandler> writeHandlerList = new ArrayList<>();
 
-    public AnnotationDefintion(JoinPoint jp) {
+    public AnnotationDefinition(JoinPoint jp) {
         this(jp,null,null);
     }
 
-    public AnnotationDefintion(JoinPoint jp, ExportExcel exportAnnotation, MethodSignature methodSignature) {
+    public AnnotationDefinition(JoinPoint jp, ExportExcel exportAnnotation, MethodSignature methodSignature) {
         this.jp = jp;
         this.methodSignature = Optional.ofNullable(methodSignature).orElseGet(this::extraMethodSignature);
         this.exportAnnotation = Optional.ofNullable(exportAnnotation).orElseGet(this::extraAnnotation);

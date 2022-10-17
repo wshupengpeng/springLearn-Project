@@ -1,6 +1,6 @@
 package com.spring.excel.processor;
 
-import com.spring.excel.support.AnnotationDefintion;
+import com.spring.excel.support.AnnotationDefinition;
 
 /**
  * @Description
@@ -9,6 +9,6 @@ import com.spring.excel.support.AnnotationDefintion;
  */
 public abstract class AbstractExcelPostProcessor {
 
-    public abstract void postProcessBeforeWrite(AnnotationDefintion defintion);
+    public abstract void postProcessBeforeWrite(AnnotationDefinition defintion);
 
 }

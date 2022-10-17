@@ -11,9 +11,7 @@ import java.lang.annotation.*;
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ExportSubSelection {
-    SubSelectionEnum mark();
+    SubSelectionEnum subselection();
 
-    int batchNum() default 1000;
-
-    int maxNum() default 10000;
+    int defaultValue();
 }

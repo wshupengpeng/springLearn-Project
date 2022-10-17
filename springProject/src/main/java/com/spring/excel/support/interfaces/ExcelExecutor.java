@@ -1,9 +1,9 @@
 package com.spring.excel.support.interfaces;
 
-import com.spring.excel.support.AnnotationDefintion;
+import com.spring.excel.support.AnnotationDefinition;
 
 public interface ExcelExecutor {
 
-    void execute(AnnotationDefintion defintion);
+    void execute(AnnotationDefinition defintion);
 
 }

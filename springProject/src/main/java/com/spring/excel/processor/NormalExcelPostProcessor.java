@@ -4,7 +4,7 @@ import com.alibaba.excel.write.metadata.style.WriteCellStyle;
 import com.alibaba.excel.write.metadata.style.WriteFont;
 import com.alibaba.excel.write.style.HorizontalCellStyleStrategy;
 import com.alibaba.excel.write.style.column.SimpleColumnWidthStyleStrategy;
-import com.spring.excel.support.AnnotationDefintion;
+import com.spring.excel.support.AnnotationDefinition;
 import org.apache.poi.ss.usermodel.IndexedColors;
 import org.springframework.stereotype.Component;
 
@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 public class NormalExcelPostProcessor extends AbstractExcelPostProcessor {
 
     @Override
-    public void postProcessBeforeWrite(AnnotationDefintion defintion) {
+    public void postProcessBeforeWrite(AnnotationDefinition defintion) {
         defintion.addWriterHandler(getSimpleColumnWidthStyleStrategy())
                 .add(getHorizontalCellStyleStrategy());
     }
