@@ -41,6 +41,7 @@ public class SubselectionExecutor implements ExcelExecutor {
         Class<?> beanClass = defintion.getExportAnnotation().beanClass();
         ProceedingJoinPoint jp = (ProceedingJoinPoint) defintion.getJp();
         Class returnType = defintion.getMethodSignature().getReturnType();
+        // 返回必须是集合，否则不支持
         if (Collection.class.isAssignableFrom(returnType)) {
             Collection proceed = null;
             PageArgs pageArgs = parsePage(defintion);
@@ -50,14 +51,14 @@ public class SubselectionExecutor implements ExcelExecutor {
                     .collect(Collectors.toList());
             HttpServletResponse response = HttpServletHolderUtil.getHttpServletResponse();
             ResponseUtils.setExcelResponseHead(response, defintion.getExportAnnotation().fileName());
-            ExcelWriterBuilder writerBuilder = EasyExcel.write(response.getOutputStream())
-                    .head(headList);
-            defintion.getWriteHandlerList().forEach(writerBuilder::registerWriteHandler);
-            WriteSheet writeSheet = new WriteSheet();
-            writeSheet.setSheetNo(0);
-            writeSheet.setSheetName(defintion.getExportAnnotation().sheetName());
-            ExcelWriter writer = writerBuilder.build();
             try {
+                ExcelWriterBuilder writerBuilder = EasyExcel.write(response.getOutputStream())
+                        .head(headList);
+                defintion.getWriteHandlerList().forEach(writerBuilder::registerWriteHandler);
+                WriteSheet writeSheet = new WriteSheet();
+                writeSheet.setSheetNo(0);
+                writeSheet.setSheetName(defintion.getExportAnnotation().sheetName());
+                ExcelWriter writer = writerBuilder.build();
                 while (!CollectionUtils.isEmpty(proceed = (Collection) jp.proceed(pageArgs.buildPage()))) {
                     List page = (List) proceed;
                     List<List<String>> dataList = ExcelUtils.parseData(page, parse);
@@ -101,6 +102,7 @@ public class SubselectionExecutor implements ExcelExecutor {
                     continue;
                 }
                 for (Field field : subList) {
+                    ExportSubSelection subSelection = field.getAnnotation(ExportSubSelection.class);
                     PageArgs.PageDefinition pageDefinition = new PageArgs.PageDefinition();
                     pageDefinition.setMark(mark);
                     pageDefinition.setSubSelectionEnum(subSelection.subselection());

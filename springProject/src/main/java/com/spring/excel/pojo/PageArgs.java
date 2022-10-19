@@ -26,7 +26,7 @@ public class PageArgs {
         pageDefinition.setValue(page);
     }
 
-    public pageDefinition getPage(SubSelectionEnum subSelectionEnum) {
+    public PageDefinition getPage(SubSelectionEnum subSelectionEnum) {
         return getDefinition(subSelectionEnum);
     }
 
