@@ -30,5 +30,5 @@ public @interface ExportExcel {
 
     Class<? extends ExcelExecutor> customizer() default ExcelExecutor.class;
 
-    Class<? extends AbstractExcelPostProcessor> postProcessor() default NormalExcelPostProcessor.class;
+    Class<? extends AbstractExcelPostProcessor>[] postProcessor() default NormalExcelPostProcessor.class;
 }

@@ -15,6 +15,10 @@ public class ResponseResult<T> {
 
     private boolean success;
 
+    private static final Integer SUCCESS_CODE = 200;
+
+    private static final Integer ERROR_CODE = 400;
+
     public ResponseResult(Integer code, String msg, T data) {
         this.code = code;
         this.msg = msg;
@@ -29,7 +33,9 @@ public class ResponseResult<T> {
         this.data = data;
     }
 
-
+    public static <T> ResponseResult<T> error(String msg) {
+        return error(ERROR_CODE, msg);
+    }
     public static <T> ResponseResult<T> error(Integer code) {
         return error(code, null);
     }
@@ -42,7 +48,10 @@ public class ResponseResult<T> {
         return newInstance(data).setCode(code).setMsg(msg).setData(data).setSuccess(false);
     }
     public static <T> ResponseResult<T> ok() {
-        return ok(null, null);
+        return ok(SUCCESS_CODE, null);
+    }
+    public static <T> ResponseResult<T> ok(T t) {
+        return ok(SUCCESS_CODE, t);
     }
 
     public static <T> ResponseResult<T> ok(Integer code) {

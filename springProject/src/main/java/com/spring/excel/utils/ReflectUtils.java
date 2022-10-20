@@ -16,9 +16,9 @@ public class ReflectUtils {
         List<Field> searchList = new ArrayList<>();
         Field[] declaredFields = clz.getDeclaredFields();
         for (Field declaredField : declaredFields) {
-            Annotation[] annotations = declaredField.getAnnotations();
+            Annotation[] annotations = declaredField.getDeclaredAnnotations();
             for (Annotation an : annotations) {
-                if(an.getClass() == annotation){
+                if(an.annotationType() == annotation){
                     searchList.add(declaredField);
                 }
             }

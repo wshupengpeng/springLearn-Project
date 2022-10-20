@@ -5,12 +5,14 @@ import com.alibaba.excel.ExcelWriter;
 import com.alibaba.excel.write.builder.ExcelWriterBuilder;
 import com.alibaba.excel.write.metadata.WriteSheet;
 import com.spring.excel.pojo.FieldEntity;
+import com.spring.excel.pojo.PageArgs;
 import com.spring.excel.support.interfaces.ExcelExecutor;
 import com.spring.excel.utils.ExcelUtils;
 import com.spring.excel.utils.HttpServletHolderUtil;
 import com.spring.excel.utils.ResponseUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -22,20 +24,22 @@ import java.util.stream.Collectors;
  * @Date 2022/10/13-21:29
  * @description:
  */
+@Component
 public class NormalExecutor implements ExcelExecutor {
     @Override
     public void execute(AnnotationDefinition defintion) {
-        Class<?> returnType = defintion.getExportAnnotation().beanClass();
+        Class<?> beanClass = defintion.getExportAnnotation().beanClass();
         ProceedingJoinPoint jp = (ProceedingJoinPoint) defintion.getJp();
+        Class returnType = defintion.getMethodSignature().getReturnType();
         try {
-            Object proceed = jp.proceed();
-            if(proceed instanceof List){
-                List<FieldEntity> parse = ExcelUtils.parseHead(returnType);
+            if (Collection.class.isAssignableFrom(returnType)) {
+                PageArgs pageArgs = ExcelUtils.parsePage(defintion);
+                Object proceed = jp.proceed(pageArgs.buildPage());
+                List<FieldEntity> parse = ExcelUtils.parseHead(beanClass);
                 List<List<String>> headList = parse.stream()
                         .map(field->Arrays.asList(field.getName()))
                         .collect(Collectors.toList());
-                List list = (List) proceed;
-                List<List<String>> dataList = ExcelUtils.parseData(list, parse);
+                List<List<String>> dataList = ExcelUtils.parseData((Collection) proceed, parse);
                 writeToExcel(defintion, headList, dataList);
             }
         } catch (Throwable e) {

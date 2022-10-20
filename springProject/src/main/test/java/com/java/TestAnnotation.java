@@ -55,10 +55,7 @@ public class TestAnnotation {
 
 
     public static void searchAnnotation(Class<?> clz, Class<?> targetAnnotation){
-        Annotation[] annotations = clz.getAnnotations();
-        for (Annotation annotation : annotations) {
 
-        }
     }
 
 

@@ -1,8 +1,10 @@
 package com.spring.test;
 
 import com.spring.entity.ResponseResult;
+import com.spring.param.UserQueryParam;
 import com.spring.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,8 +22,13 @@ public class ExcelTestController {
     private IUserService iUserService;
 
     @RequestMapping("/normal/export")
-    public ResponseResult excelExportNormal(){
-        iUserService.queryList();
-        return ResponseResult.ok();
+    public void excelExportNormal(@RequestBody UserQueryParam queryParam){
+        iUserService.queryList(queryParam);
+    }
+
+
+    @RequestMapping("/sub/export")
+    public void excelExportSub(@RequestBody UserQueryParam queryParam){
+        iUserService.querySubList(queryParam);
     }
 }

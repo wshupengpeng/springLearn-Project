@@ -1,10 +1,17 @@
 package com.spring.excel.utils;
 
 import com.spring.excel.annotation.ExportField;
+import com.spring.excel.annotation.ExportSubSelection;
 import com.spring.excel.pojo.FieldEntity;
+import com.spring.excel.pojo.PageArgs;
+import com.spring.excel.support.AnnotationDefinition;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.util.CollectionUtils;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.lang.reflect.Parameter;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -21,10 +28,10 @@ public class ExcelUtils {
         for (Object o : list) {
             Field[] declaredFields = o.getClass().getDeclaredFields();
             List<String> row = new ArrayList<>();
-            for (FieldEntity fieldEntity : sortedFieldList) {
-                for (Field declaredField : declaredFields) {
+            for (Field declaredField : declaredFields) {
+                String strValue = "";
+                for (FieldEntity fieldEntity : sortedFieldList) {
                     declaredField.setAccessible(true);
-                    String strValue = "";
                     if(declaredField.getName().equals(fieldEntity.getFieldName())){
                         Object value = null;
                         try {
@@ -37,9 +44,10 @@ public class ExcelUtils {
                         }else{
                             strValue = value == null ? strValue : value.toString();
                         }
+                        break;
                     }
-                    row.add(strValue);
                 }
+                row.add(strValue);
             }
             dataList.add(row);
         }
@@ -52,7 +60,7 @@ public class ExcelUtils {
         for (Field declaredField : declaredFields) {
             Annotation[] annotations = declaredField.getAnnotations();
             for (Annotation annotation : annotations) {
-                if(annotation.getClass() == ExportField.class){
+                if(annotation.annotationType() == ExportField.class){
                     ExportField exportField = (ExportField) annotation;
                     FieldEntity fieldEntity = new FieldEntity();
                     fieldEntity.setName(exportField.name());
@@ -65,6 +73,48 @@ public class ExcelUtils {
         }
         return  fieldEntityList.stream()
                 .sorted(Comparator.comparing(FieldEntity::getOrder)).collect(Collectors.toList());
+    }
+
+    public static PageArgs parsePage(AnnotationDefinition defintion){
+        ProceedingJoinPoint jp = (ProceedingJoinPoint) defintion.getJp();
+        MethodSignature methodSignature = defintion.getMethodSignature();
+        Parameter[] parameters = methodSignature.getMethod().getParameters();
+        PageArgs pageArgs = new PageArgs();
+        for (int mark = 0; mark < parameters.length; mark++) {
+            // 判断是否是基本类型
+            Parameter parameter = parameters[mark];
+            if(parameter.getType().isPrimitive()){
+                Annotation[] annotations = parameter.getAnnotations();
+                for (Annotation annotation : annotations) {
+                    if(annotation.annotationType() == ExportSubSelection.class ){
+                        ExportSubSelection subSelection = (ExportSubSelection)annotation;
+                        PageArgs.PageDefinition pageDefinition = new PageArgs.PageDefinition();
+                        pageDefinition.setMark(mark);
+                        pageDefinition.setSubSelectionEnum(subSelection.subselection());
+                        pageDefinition.setObj(false);
+                        pageDefinition.setValue(subSelection.defaultValue());
+                        pageArgs.addPageDefinition(pageDefinition);
+                    }
+                }
+            }else{
+                List<Field> subList = ReflectUtils.getFieldByAnnotation(parameter.getType(),ExportSubSelection.class);
+                if(CollectionUtils.isEmpty(subList)){
+                    continue;
+                }
+                for (Field field : subList) {
+                    ExportSubSelection subSelection = field.getAnnotation(ExportSubSelection.class);
+                    PageArgs.PageDefinition pageDefinition = new PageArgs.PageDefinition();
+                    pageDefinition.setMark(mark);
+                    pageDefinition.setSubSelectionEnum(subSelection.subselection());
+                    pageDefinition.setObj(true);
+                    pageDefinition.setValue(subSelection.defaultValue());
+                    pageDefinition.setField(field);
+                    pageArgs.addPageDefinition(pageDefinition);
+                }
+            }
+        }
+        pageArgs.setArgs(jp.getArgs());
+        return pageArgs;
     }
 
 
