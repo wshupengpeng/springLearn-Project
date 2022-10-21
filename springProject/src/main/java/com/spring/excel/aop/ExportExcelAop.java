@@ -30,12 +30,12 @@ public class ExportExcelAop {
     @Autowired
     private ApplicationContext applicationContext;
 
-    @Pointcut("@annotation(com.spring.excel.annotation.ExportExcel)")
+    @Pointcut("@annotation(com.spring.excel.annotation.FilterAnnotation)")
     public void pointCut(){
     }
 
     @Around(value = "pointCut()")
-    public Object exportProcessor(ProceedingJoinPoint jp){
+    public Object export(ProceedingJoinPoint jp){
         try {
             AnnotationDefinition defintion = new AnnotationDefinition(jp);
             invokePostProcesser(defintion);

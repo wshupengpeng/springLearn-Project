@@ -6,4 +6,7 @@ public interface ExcelExecutor {
 
     void execute(AnnotationDefinition defintion);
 
+
+    boolean support(AnnotationDefinition definition);
+
 }

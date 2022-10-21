@@ -1,13 +1,10 @@
 package com.spring.excel.support;
 
-import com.alibaba.excel.write.handler.WriteHandler;
 import com.spring.excel.annotation.ExportExcel;
 import lombok.Data;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.reflect.MethodSignature;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 /**
@@ -24,7 +21,6 @@ public class AnnotationDefinition {
 
     private MethodSignature methodSignature;
 
-    private List<WriteHandler> writeHandlerList = new ArrayList<>();
 
     public AnnotationDefinition(JoinPoint jp) {
         this(jp,null,null);
@@ -44,8 +40,4 @@ public class AnnotationDefinition {
         return this.methodSignature.getMethod().getAnnotation(ExportExcel.class);
     }
 
-    public List<WriteHandler> addWriterHandler(WriteHandler writeHandler){
-        writeHandlerList.add(writeHandler);
-        return writeHandlerList;
-    }
 }

@@ -4,7 +4,7 @@ import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.ExcelWriter;
 import com.alibaba.excel.write.builder.ExcelWriterBuilder;
 import com.alibaba.excel.write.metadata.WriteSheet;
-import com.spring.excel.annotation.ExportSubSelection;
+import com.spring.excel.enums.ExportModeEnum;
 import com.spring.excel.enums.SubSelectionEnum;
 import com.spring.excel.exceptions.ExcelCommonException;
 import com.spring.excel.pojo.FieldEntity;
@@ -12,17 +12,12 @@ import com.spring.excel.pojo.PageArgs;
 import com.spring.excel.support.interfaces.ExcelExecutor;
 import com.spring.excel.utils.ExcelUtils;
 import com.spring.excel.utils.HttpServletHolderUtil;
-import com.spring.excel.utils.ReflectUtils;
 import com.spring.excel.utils.ResponseUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import javax.servlet.http.HttpServletResponse;
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
-import java.lang.reflect.Parameter;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -53,7 +48,7 @@ public class SubselectionExecutor implements ExcelExecutor {
             try {
                 ExcelWriterBuilder writerBuilder = EasyExcel.write(response.getOutputStream())
                         .head(headList);
-                defintion.getWriteHandlerList().forEach(writerBuilder::registerWriteHandler);
+//                defintion.getWriteHandlerList().forEach(writerBuilder::registerWriteHandler);
                 WriteSheet writeSheet = new WriteSheet();
                 writeSheet.setSheetNo(0);
                 writeSheet.setSheetName(defintion.getExportAnnotation().sheetName());
@@ -72,9 +67,10 @@ public class SubselectionExecutor implements ExcelExecutor {
         }
     }
 
-
-
-
+    @Override
+    public boolean support(AnnotationDefinition definition) {
+        return definition.getExportAnnotation().mode() == ExportModeEnum.SUBSELECTION;
+    }
 
 
 }
