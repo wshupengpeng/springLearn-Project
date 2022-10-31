@@ -30,3 +30,14 @@
 
 2 上传脚手架到maven仓库
 3 使用脚手架创建项目
+
+
+10.27:
+1 自定义executor实例方式   完成
+2 executor 实例化的pageArgs如何修改（提供扩展接口）  不修改，把pageArgs放到executor中，
+因为以后想要支持其他文件格式的导出，因此只需要实现对应executor就可以了   完成
+3 在sub和normal上提供限制接口，可以提供限制最大导出数量功能  部分完成
+目前normal\sub模式下，通过limit限制最大导出数量,操作方式不完美,可以后续继续改.
+sub模式下,超过limit限制会报错
+normal模式下,最多会查limit条数据
+4 annotation 是否支持多注解方式，不支持可能需要使用proxy进行操作 (feature 版本需要修改,通过代理实现)

@@ -13,10 +13,10 @@ import lombok.Data;
 public class UserQueryParam {
 
     @ExportSubSelection(subselection = SubSelectionEnum.PAGE_NO, defaultValue = 1)
-    private Integer pageNo;
+    private Long pageNo;
 
-    @ExportSubSelection(subselection = SubSelectionEnum.PAGE_NO, defaultValue = 10)
-    private Integer pageSize;
+    @ExportSubSelection(subselection = SubSelectionEnum.PAGE_SIZE, defaultValue = 10)
+    private Long pageSize;
 
 
 }

@@ -81,9 +81,9 @@ public class ExcelUtils {
         Parameter[] parameters = methodSignature.getMethod().getParameters();
         PageArgs pageArgs = new PageArgs();
         for (int mark = 0; mark < parameters.length; mark++) {
-            // 判断是否是基本类型
             Parameter parameter = parameters[mark];
-            if(parameter.getType().isPrimitive()){
+            // 判断是否是基本类型
+            if(ReflectUtils.isPrimitive(parameter.getType())){
                 Annotation[] annotations = parameter.getAnnotations();
                 for (Annotation annotation : annotations) {
                     if(annotation.annotationType() == ExportSubSelection.class ){

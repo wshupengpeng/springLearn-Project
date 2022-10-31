@@ -13,5 +13,5 @@ import java.lang.annotation.*;
 public @interface ExportSubSelection {
     SubSelectionEnum subselection();
 
-    int defaultValue();
+    long defaultValue();
 }

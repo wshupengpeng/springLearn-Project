@@ -54,10 +54,25 @@ public class TestAnnotation {
     }
 
 
-    public static void searchAnnotation(Class<?> clz, Class<?> targetAnnotation){
-
+    public boolean searchAnnotation(Class<?> clz, Class<?> targetAnnotation){
+        Annotation[] annotations = clz.getAnnotations();
+        for (Annotation annotation : annotations) {
+            // 如果是java基础注解，则跳过当前搜索
+            if(annotation.annotationType().getName().startsWith("java.lang")) continue;
+            // 否则递归查询
+            if(annotation.annotationType() == targetAnnotation
+                    || searchAnnotation(annotation.annotationType(),targetAnnotation)){
+                return true;
+            }
+        }
+        return false;
     }
 
+    @Test
+    public void searchAnnotationTest(){
+        boolean b = searchAnnotation(GrandSon.class, ParentAnnotation.class);
+        System.out.println("search Annotation res:" + b);
+    }
 
 
 }
@@ -81,5 +96,13 @@ public class TestAnnotation {
 @Retention(RetentionPolicy.RUNTIME)
 @ParentAnnotation
 @interface ChildAnnotation{
+
+}
+
+@Target(ElementType.TYPE)
+@Documented
+@Retention(RetentionPolicy.RUNTIME)
+@ChildAnnotation
+@interface GrandSon{
 
 }

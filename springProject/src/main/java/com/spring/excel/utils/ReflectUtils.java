@@ -25,4 +25,20 @@ public class ReflectUtils {
         }
         return searchList;
     }
+
+    /**
+     * 判断当前类型是否是基础类型或者基础类型包装类
+     * @param clz
+     * @return
+     */
+    public static boolean isPrimitive(Class clz){
+        try {
+            return clz.isPrimitive() || ((Class)clz.getField("TYPE").get(null)).isPrimitive();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }

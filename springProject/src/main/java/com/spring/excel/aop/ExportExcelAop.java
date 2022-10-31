@@ -3,6 +3,7 @@ package com.spring.excel.aop;
 import com.spring.entity.ResponseResult;
 import com.spring.excel.processor.AbstractExcelPostProcessor;
 import com.spring.excel.support.AnnotationDefinition;
+import com.spring.excel.support.ExcelAnnotationDefinition;
 import com.spring.excel.support.ExcelRulerHolder;
 import com.spring.excel.support.interfaces.ExcelExecutor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,14 +31,14 @@ public class ExportExcelAop {
     @Autowired
     private ApplicationContext applicationContext;
 
-    @Pointcut("@annotation(com.spring.excel.annotation.FilterAnnotation)")
+    @Pointcut("@annotation(com.spring.excel.annotation.ExportExcel)")
     public void pointCut(){
     }
 
     @Around(value = "pointCut()")
     public Object export(ProceedingJoinPoint jp){
         try {
-            AnnotationDefinition defintion = new AnnotationDefinition(jp);
+            ExcelAnnotationDefinition defintion = new ExcelAnnotationDefinition(jp);
             invokePostProcesser(defintion);
             ExcelExecutor executor = excelRulerHolder.match(defintion);
             executor.execute(defintion);

@@ -7,6 +7,7 @@ import lombok.Data;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @Description
@@ -21,7 +22,7 @@ public class PageArgs {
     private List<PageDefinition> pageDefinitions = new ArrayList<>();
 
 
-    public void setPage(Integer page, SubSelectionEnum subSelectionEnum) {
+    public void setPage(Long page, SubSelectionEnum subSelectionEnum) {
         PageDefinition pageDefinition = getDefinition(subSelectionEnum);
         pageDefinition.setValue(page);
     }
@@ -67,6 +68,6 @@ public class PageArgs {
         private boolean isObj;
         private int mark;
         private SubSelectionEnum subSelectionEnum;
-        private Integer value;
+        private Long value;
     }
 }

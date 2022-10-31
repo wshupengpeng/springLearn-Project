@@ -2,6 +2,7 @@ package com.spring.excel.support;
 
 import com.alibaba.excel.write.handler.WriteHandler;
 import com.spring.excel.annotation.ExportExcel;
+import lombok.Data;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.reflect.MethodSignature;
 
@@ -13,6 +14,7 @@ import java.util.List;
  * @Author 01415355
  * @Date 2022/10/21 16:42
  */
+@Data
 public class ExcelAnnotationDefinition extends AnnotationDefinition{
     private List<WriteHandler> writeHandlerList = new ArrayList<>();
 
