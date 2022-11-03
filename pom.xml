@@ -17,6 +17,9 @@
         <module>springProject</module>
         <module>spring-cloud-gateway</module>
         <module>maven-Archetype-Demo</module>
+        <module>export-file-common</module>
+        <module>export-file-core</module>
+        <module>export-file-boot-stater</module>
     </modules>
 
     <properties>
