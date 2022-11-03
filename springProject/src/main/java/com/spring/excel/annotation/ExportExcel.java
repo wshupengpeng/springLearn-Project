@@ -14,7 +14,6 @@ import java.lang.annotation.*;
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Inherited
-@Repeatable(FilterAnnotation.class)
 public @interface ExportExcel {
     /**
      *  需要导出实体类
