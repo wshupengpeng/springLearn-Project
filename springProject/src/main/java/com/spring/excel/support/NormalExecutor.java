@@ -7,6 +7,7 @@ import com.alibaba.excel.write.metadata.WriteSheet;
 import com.spring.excel.annotation.ExportExcel;
 import com.spring.excel.enums.ExportModeEnum;
 import com.spring.excel.enums.SubSelectionEnum;
+import com.spring.excel.exceptions.ExcelCommonException;
 import com.spring.excel.pojo.FieldEntity;
 import com.spring.excel.pojo.PageArgs;
 import com.spring.excel.support.interfaces.ExcelExecutor;
@@ -43,7 +44,7 @@ public class NormalExecutor implements ExcelExecutor {
                     // 定义规则对象
                     PageArgs pageArgs = ExcelUtils.parsePage(defintion);
                     // 添加限制
-                    pageArgs.setPage(Math.max(exportAnnotation.limit(), pageArgs.getPage(SubSelectionEnum.PAGE_SIZE).getValue()), SubSelectionEnum.PAGE_SIZE);
+                    if(pageArgs.getPage(SubSelectionEnum.PAGE_SIZE).getValue() > exportAnnotation.limit()) throw new ExcelCommonException("超出最大导出数量");
                     Object proceed = jp.proceed(pageArgs.buildPage());
                     List<FieldEntity> parse = ExcelUtils.parseHead(beanClass);
                     List<List<String>> headList = parse.stream()

@@ -31,13 +31,13 @@ import java.util.List;
 @Primary
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IUserService {
 
-    @ExportExcel(beanClass = User.class,fileName = "文件导出",limit = 10)
+    @ExportExcel(beanClass = User.class, fileName = "文件导出", limit = 10)
     public List<User> queryList(NormalUserQueryParam queryParam){
         IPage page = new Page(queryParam.getPageNo(),queryParam.getPageSize());
         return baseMapper.selectPage(page,new QueryWrapper<User>()).getRecords();
     }
 
-    @ExportExcel(beanClass = User.class,fileName = "文件导出",mode = ExportModeEnum.SUBSELECTION,limit = 40)
+    @ExportExcel(beanClass = User.class, fileName = "文件导出", mode = ExportModeEnum.SUBSELECTION, limit = 40)
     @Override
     public List<User> querySubList(UserQueryParam queryParam){
         IPage page = new Page(queryParam.getPageNo(),queryParam.getPageSize());
@@ -45,7 +45,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     }
 
     @Override
-    @ExportExcel(beanClass = User.class,fileName = "文件导出",limit = 30)
+    @ExportExcel(beanClass = User.class, fileName = "文件导出", limit = 30)
     public List<User> queryList(@ExportSubSelection(subselection = SubSelectionEnum.PAGE_NO,defaultValue = 1) Long pageNo,
                                 @ExportSubSelection(subselection = SubSelectionEnum.PAGE_SIZE,defaultValue = 10)Long pageSize) {
         IPage page = new Page(pageNo,pageSize);
@@ -53,7 +53,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     }
 
     @Override
-    @ExportExcel(beanClass = User.class,fileName = "文件导出",mode = ExportModeEnum.SUBSELECTION,limit = 40)
+    @ExportExcel(beanClass = User.class, fileName = "文件导出", mode = ExportModeEnum.SUBSELECTION, limit = 40)
     public List<User> querySubList(@ExportSubSelection(subselection = SubSelectionEnum.PAGE_NO,defaultValue = 1) Long pageNo,
                                    @ExportSubSelection(subselection = SubSelectionEnum.PAGE_SIZE,defaultValue = 20)Long pageSize) {
         IPage page = new Page(pageNo,pageSize);
