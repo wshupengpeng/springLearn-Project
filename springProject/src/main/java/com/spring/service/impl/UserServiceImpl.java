@@ -15,6 +15,8 @@ import com.spring.service.IUserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
@@ -58,5 +60,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
                                    @ExportSubSelection(subselection = SubSelectionEnum.PAGE_SIZE,defaultValue = 20)Long pageSize) {
         IPage page = new Page(pageNo,pageSize);
         return baseMapper.selectPage(page,new QueryWrapper<User>()).getRecords();
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void update(User user) {
+        updateById(user);
     }
 }

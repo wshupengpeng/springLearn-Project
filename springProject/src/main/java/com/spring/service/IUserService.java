@@ -24,4 +24,6 @@ public interface IUserService extends IService<User> {
     List<User> queryList(Long pageNo, Long pageSize);
 
     List<User> querySubList(Long pageNo, Long pageSize);
+
+    void update(User user);
 }
