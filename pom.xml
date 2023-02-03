@@ -20,6 +20,7 @@
         <module>export-file-common</module>
         <module>export-file-core</module>
         <module>export-file-boot-stater</module>
+        <module>WebSocketProject</module>
     </modules>
 
     <properties>

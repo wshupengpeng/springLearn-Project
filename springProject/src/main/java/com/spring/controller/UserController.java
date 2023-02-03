@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.function.Function;
+
 /**
  * <p>
  * 前端控制器
@@ -32,5 +34,15 @@ public class UserController {
         iUserService.save(user);
         int i = 1/0;
         System.out.println(user);
+    }
+
+    public static void main(String[] args) {
+        fn(User::getUserName,new User());
+    }
+
+
+    public static <T>void fn(Function<T,String> fn,T t){
+        String apply = fn.apply(t);
+        System.out.println(apply);
     }
 }
