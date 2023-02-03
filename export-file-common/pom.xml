@@ -64,8 +64,8 @@
             <groupId>com.alibaba</groupId>
             <artifactId>druid-spring-boot-starter</artifactId>
             <version>${druid.version}</version>
-            <scope>test</scope>
-
+<!--            <scope>test</scope>-->
+            <optional>true</optional>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/com.baomidou/mybatis-plus-generator -->
