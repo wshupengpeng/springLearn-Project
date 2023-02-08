@@ -55,13 +55,22 @@ public class DefaultHandler implements WebSocketHandler {
         if(preReceiveTime == null){
             preReceiveTime = System.currentTimeMillis();
         }
+        if(webSocketMessage instanceof PongMessage){
+            log.info("pong message");
+            return;
+        }
+
         log.info("socket receiveMessage time gap is :{}",System.currentTimeMillis() - preReceiveTime);
         Object payload = webSocketMessage.getPayload();
+        if(payload.toString().equals("123")){
+            throw new RuntimeException("测试异常");
+        }
         webSocketSession.sendMessage(new TextMessage("发送消息"));
         String name = Thread.currentThread().getName();
         long id = Thread.currentThread().getId();
         log.info("webSocketMessage:{},payload:{},threadId:{},threadName:{}", webSocketMessage, JSONObject.toJSONString(payload), id, name);
         preReceiveTime = System.currentTimeMillis();
+        log.info("attribute:{}",webSocketSession.getAttributes());
     }
 
     /**
@@ -72,7 +81,7 @@ public class DefaultHandler implements WebSocketHandler {
      */
     @Override
     public void handleTransportError(WebSocketSession webSocketSession, Throwable throwable) throws Exception {
-
+        log.info("当前处理发生异常。。。。。。");
     }
 
     /**
