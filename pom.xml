@@ -21,6 +21,8 @@
         <module>export-file-core</module>
         <module>export-file-boot-stater</module>
         <module>WebSocketProject</module>
+        <module>EasyExcelDemo</module>
+        <module>poi-project</module>
     </modules>
 
     <properties>
