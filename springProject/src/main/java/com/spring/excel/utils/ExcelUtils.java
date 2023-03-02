@@ -71,7 +71,7 @@ public class ExcelUtils {
                 }
             }
         }
-        return  fieldEntityList.stream()
+        return fieldEntityList.stream()
                 .sorted(Comparator.comparing(FieldEntity::getOrder)).collect(Collectors.toList());
     }
 
