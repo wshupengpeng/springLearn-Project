@@ -60,7 +60,7 @@ public class SubselectionExecutor implements ExcelExecutor {
                     long count = 0l;
                     while (!CollectionUtils.isEmpty(proceed = (Collection) jp.proceed(pageArgs.buildPage()))) {
                         List page = (List) proceed;
-                        count+=page.size();
+                        count += page.size();
                         if(count > limit) throw new ExcelCommonException("超过当前最大导出数量:" + limit);
                         List<List<String>> dataList = ExcelUtils.parseData(page, parse);
                         writer.write(dataList, writeSheet);
