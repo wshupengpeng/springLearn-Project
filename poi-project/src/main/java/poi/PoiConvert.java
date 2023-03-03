@@ -1,19 +1,32 @@
 package poi;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.poifs.filesystem.DirectoryEntry;
 import org.apache.poi.poifs.filesystem.DocumentEntry;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.apache.poi.xwpf.usermodel.XWPFTable;
+import org.apache.poi.xwpf.usermodel.XWPFTableCell;
+import org.apache.poi.xwpf.usermodel.XWPFTableRow;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.nodes.Node;
 import org.junit.Test;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.*;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Objects;
 
 /**
  * @Description
  * @Author 01415355
  * @Date 2023/2/22 16:53
  */
+@Slf4j
 public class PoiConvert {
 
     /**
@@ -46,5 +59,77 @@ public class PoiConvert {
         String destFile = "d:\\hpp\\1.doc";
         File file = new File(srcFile);
         Document parse = Jsoup.parse(file, "utf-8");
+        parseElement(parse.body());
     }
+
+    private void parseElement(Element element){
+        List<Node> nodes = element.childNodes();
+        ListIterator<Node> nodeListIterator = nodes.listIterator();
+        while(nodeListIterator.hasNext()){
+            Node next = nodeListIterator.next();
+            if(next instanceof Element){
+                parseElement((Element) next);
+            }
+        }
+        //1 解析当前元素
+        if(element instanceof Node){
+            if ("tr".equals(element.tagName())
+                    || "tbody".equals(element.tagName())
+                    || "table".equals(element.tagName())
+                    || "br".equals(element.tagName())
+                    || "body".equals(element.tagName())) {
+//                log.info("换行符");
+                return;
+            }
+            if(element.hasText()){
+                log.info("当前标签：{}，文本内容：{}",element.tagName(),element.text());
+            }
+            return;
+        }
+        element.children().forEach(this::parseElement);
+        //2 解析当前元素的兄弟元素
+        Element nextElementSibling = element.nextElementSibling();
+        if(Objects.isNull(nextElementSibling)){
+            return;
+        }
+        parseElement(nextElementSibling);
+    }
+
+    @Test
+    public void createTable() throws IOException {
+        XWPFDocument xwpfDocument = new XWPFDocument();
+        List<String[]> tableList = createTableList();
+//        XWPFTable table = xwpfDocument.createTable(tableList.size(), tableList.get(0).length);
+        XWPFTable table = xwpfDocument.createTable();
+        CTTbl ctTbl = table.getCTTbl();
+        CTTblPr tblPr = ctTbl.getTblPr();
+        CTTblLayoutType ctTblLayoutType = tblPr.addNewTblLayout();
+        ctTblLayoutType.setType(STTblLayoutType.AUTOFIT);
+        CTRow ctRow = ctTbl.addNewTr();
+        XWPFTableRow xwpfTableRow = new XWPFTableRow(ctRow,table);
+        table.addRow(xwpfTableRow);
+        // 填充数据
+        int length = tableList.size();
+        for (int i = 0; i < 1; i++) {
+            XWPFTableRow row = table.getRow(i);
+            List<XWPFTableCell> cells = row.getTableCells();
+            for (int j = 0; j < cells.size(); j++) {
+                cells.get(j).setText(tableList.get(i)[j]);
+            }
+        }
+        xwpfDocument.write(new FileOutputStream("d:/demo.docx"));
+    }
+
+    private List<String[]> createTableList(){
+        List<String[]> tables = new ArrayList<>();
+        for(int i = 0; i < 10; i++){
+            String[] row = new String[10];
+            for(int j = 0; j < 10; j++){
+                row[j] = String.format("第%d行,第%d列", i, j);
+            }
+            tables.add(row);
+        }
+        return tables;
+    }
+
 }

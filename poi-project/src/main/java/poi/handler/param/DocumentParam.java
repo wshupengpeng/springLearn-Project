@@ -1,12 +1,8 @@
 package poi.handler.param;
 
-import com.deepoove.poi.NiceXWPFDocument;
 import lombok.Data;
 import lombok.experimental.Accessors;
-import org.apache.poi.xwpf.usermodel.IBodyElement;
-import org.apache.poi.xwpf.usermodel.XWPFParagraph;
-import org.apache.poi.xwpf.usermodel.XWPFRun;
-import org.apache.poi.xwpf.usermodel.XWPFTableCell;
+import org.apache.poi.xwpf.usermodel.*;
 import org.apache.xmlbeans.XmlCursor;
 import org.jsoup.nodes.Node;
 
@@ -35,7 +31,7 @@ public class DocumentParam {
     /**
      * 文档对象
      */
-    private NiceXWPFDocument doc;
+    private XWPFDocument doc;
 
     /**
      * 是否继续迭代子节点
