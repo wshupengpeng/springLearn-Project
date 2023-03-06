@@ -22,6 +22,6 @@ public class PTagHandler extends AbstractHtmlTagHandler {
 
     @Override
     public void handler(DocumentParam documentParam) {
-
+        // 解析标签值
     }
 }

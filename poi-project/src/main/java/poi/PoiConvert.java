@@ -12,6 +12,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
+import org.jsoup.parser.Tag;
 import org.junit.Test;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.*;
 
@@ -55,20 +56,44 @@ public class PoiConvert {
 
     @Test
     public void htmlConvertWordByJsonp()throws IOException{
-        String srcFile = "D:\\hpp\\1.html";
-        String destFile = "d:\\hpp\\1.doc";
+        String srcFile = "D:\\hpp\\2.html";
+        String destFile = "d:\\hpp\\2.doc";
         File file = new File(srcFile);
         Document parse = Jsoup.parse(file, "utf-8");
-        parseElement(parse.body());
+//        parseTableElement(parse.body());
+        parseTextElement(parse.body());
     }
 
-    private void parseElement(Element element){
+    /**
+     *  解析文本数据
+     * @param element
+     */
+    private void parseTextElement(Element element){
         List<Node> nodes = element.childNodes();
         ListIterator<Node> nodeListIterator = nodes.listIterator();
         while(nodeListIterator.hasNext()){
             Node next = nodeListIterator.next();
             if(next instanceof Element){
-                parseElement((Element) next);
+                parseTextElement((Element) next);
+            }
+        }
+        Tag tag = element.tag();
+        if(tag.getName().equals("body") || "br".equals(element.tagName())) return;
+        String text = element.text();
+        log.info("tagName:{},text:{}",tag.getName(), text);
+    }
+
+    /**
+     *  解析表格数据
+     * @param element
+     */
+    private void parseTableElement(Element element){
+        List<Node> nodes = element.childNodes();
+        ListIterator<Node> nodeListIterator = nodes.listIterator();
+        while(nodeListIterator.hasNext()){
+            Node next = nodeListIterator.next();
+            if(next instanceof Element){
+                parseTableElement((Element) next);
             }
         }
         //1 解析当前元素
@@ -86,13 +111,13 @@ public class PoiConvert {
             }
             return;
         }
-        element.children().forEach(this::parseElement);
+        element.children().forEach(this::parseTableElement);
         //2 解析当前元素的兄弟元素
         Element nextElementSibling = element.nextElementSibling();
         if(Objects.isNull(nextElementSibling)){
             return;
         }
-        parseElement(nextElementSibling);
+        parseTableElement(nextElementSibling);
     }
 
     @Test
