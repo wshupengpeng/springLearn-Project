@@ -1,6 +1,8 @@
 package com.java;
 
+import com.spring.entity.User;
 import org.junit.Test;
+import org.springframework.beans.BeanUtils;
 
 import java.lang.annotation.*;
 import java.lang.reflect.Method;
@@ -31,6 +33,18 @@ public class TestAnnotation {
 
     public void test(@ParamterType String str){
 
+    }
+
+    @Test
+    public void beanProperties(){
+        User  user = new User();
+        user.setId(1L);
+        user.setUserName("123");
+        User user1 = new User();
+        user.setId(2L);
+        user.setUserName("234");
+        BeanUtils.copyProperties(user,user1);
+        System.out.println(user1);
     }
 
     @Test

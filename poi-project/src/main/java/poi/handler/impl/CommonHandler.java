@@ -1,0 +1,39 @@
+package poi.handler.impl;
+
+import com.deepoove.poi.data.TextRenderData;
+import com.deepoove.poi.data.style.Style;
+import com.deepoove.poi.policy.TextRenderPolicy;
+import lombok.extern.slf4j.Slf4j;
+import org.jsoup.nodes.Node;
+import org.jsoup.nodes.TextNode;
+import poi.handler.AbstractHtmlTagHandler;
+import poi.handler.common.PoiCommon;
+import poi.handler.param.DocumentParam;
+
+import java.util.Optional;
+
+/**
+ * @Description: 处理文本信息
+ *  标签解析后,为TextNode的节点均在当前处理类进行解析,绘制赋值。
+ * @Author 01415355
+ * @Date 2023/3/8 14:52
+ */
+@Slf4j
+public class CommonHandler extends AbstractHtmlTagHandler {
+
+    @Override
+    public String getTagName() {
+        return "";
+    }
+
+    @Override
+    public void handler(DocumentParam documentParam) {
+        // 处理当前文本数据
+        Node currentNode = documentParam.getCurrentNode();
+        if(currentNode instanceof TextNode){
+            TextRenderPolicy.Helper.renderTextRun(documentParam.createRun(),
+                    new TextRenderData(((TextNode) currentNode).text(),
+                            Optional.ofNullable(documentParam.getStyle()).orElse(PoiCommon.DEFAULT_STYLE)));
+        }
+    }
+}

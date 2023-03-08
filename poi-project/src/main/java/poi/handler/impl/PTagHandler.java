@@ -8,8 +8,6 @@ import poi.handler.AbstractHtmlTagHandler;
 import poi.handler.param.DocumentParam;
 import poi.handler.utils.HtmlToWordUtils;
 
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -30,16 +28,19 @@ public class PTagHandler extends AbstractHtmlTagHandler {
     public void handler(DocumentParam documentParam) {
         // 解析标签值
         Node currentNode = documentParam.getCurrentNode();
-        if(currentNode instanceof TextNode){
-            if(log.isDebugEnabled()){
-                log.debug("解析p标签,解析内容：{}", ((TextNode) currentNode).getWholeText());
-            }
-            XWPFRun run = documentParam.getCurrentParagraph().createRun();
-            run.setText(((TextNode) currentNode).getWholeText());
-            //todo 字体格式等设置
-        }else{
-            HtmlToWordUtils.parseTagByName(documentParam,currentNode);
-        }
+        // p标签是块元素,如果有p标签则直接换行
+        documentParam.createRun().getCTR().addNewBr();
+//        if(currentNode instanceof TextNode){
+//            if(log.isDebugEnabled()){
+//                log.debug("解析p标签,解析内容：{}", ((TextNode) currentNode).getWholeText());
+//            }
+//            XWPFRun run = documentParam.getCurrentParagraph().createRun();
+//            run.setText(((TextNode) currentNode).getWholeText());
+//            //todo 字体格式等设置
+//        }else{
+        List<Node> childNodes = currentNode.childNodes();
+        childNodes.forEach(childNode -> HtmlToWordUtils.parseTagByName(documentParam, currentNode));
+//        }
         log.info("当前处理类：{},解析标签成功", this.getClass().getSimpleName());
     }
 }

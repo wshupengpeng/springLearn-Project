@@ -1,5 +1,6 @@
 package poi.handler.utils;
 
+import com.deepoove.poi.data.style.Style;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.jsoup.Jsoup;
@@ -7,6 +8,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 import poi.handler.AbstractHtmlTagHandler;
+import poi.handler.common.PoiCommon;
 import poi.handler.param.DocumentParam;
 
 import java.util.concurrent.ConcurrentHashMap;
@@ -44,6 +46,10 @@ public class HtmlToWordUtils {
 
 
     public static void parseTagByName(DocumentParam documentParam, Node node) {
+        if(documentParam.getContinueItr()){
+            log.info("跳过子节点迭代");
+            return;
+        }
         DocumentParam broParam = new DocumentParam();
         broParam.setDoc(documentParam.getDoc())
                 .setCurrentParagraph(documentParam.getCurrentParagraph())

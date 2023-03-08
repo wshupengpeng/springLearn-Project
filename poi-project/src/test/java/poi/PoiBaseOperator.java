@@ -7,6 +7,10 @@ import com.deepoove.poi.policy.TextRenderPolicy;
 import com.deepoove.poi.util.TableTools;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.xwpf.usermodel.*;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.*;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -30,6 +34,8 @@ public class PoiBaseOperator {
     public static final XWPFDocument doc = new XWPFDocument();
 
     public static final String descPath = "d://hpp//test.doc";
+
+    public static final String srcPath = "d://hpp//2.html";
 
     @Before
     public void before(){
@@ -174,6 +180,78 @@ public class PoiBaseOperator {
         }
 
     }
+
+    @Test
+    public void operatorTableAttr() throws IOException {
+        Document parse = Jsoup.parse(new File(srcPath));
+        Element body = parse.body();
+        // body 不含有兄弟节点
+        // 遍历子节点
+        Elements table = body.getElementsByTag("table");
+
+        String html = table.html();
+//        log.info(html);
+        log.info("element size:{}",table.size());
+        // table只有一个标签
+        for (Element element : table) {
+            Elements tr = element.getElementsByTag("tr");
+            Elements th = element.getElementsByTag("th");
+            Elements td = element.getElementsByTag("td");
+//            Elements tr = element.select("tr");
+            tr.forEach(this::printElement);
+            th.forEach(this::printElement);
+            td.forEach(this::printElement);
+//            Attributes attributes = element.attributes();
+//            for (Attribute attribute : attributes) {
+//                log.info("attribute:{}",attribute);
+//            }
+//            Elements tr = element.getElementsByAttribute("tr");
+//            Elements th = element.getElementsByAttribute("th");
+//            Elements td = element.getElementsByAttribute("td");
+//            tr.forEach(this::printElement);
+//            th.forEach(this::printElement);
+//            td.forEach(this::printElement);
+        }
+
+    }
+
+
+    public void printElement(Element element){
+        List<Node> childNodes = element.childNodes();
+        childNodes.forEach(node->{
+            if(node instanceof Element){
+                Element childElement = (Element) node;
+                log.info("childTagName:{},childText:{}", childElement.tagName(), childElement.text());
+            }
+        });
+        log.info("tagName:{},text:{}", element.tagName(), element.text());
+    }
+
+
+    @Test
+    public void printPTag() throws IOException {
+        Document parse = Jsoup.parse(new File(srcPath));
+        Element body = parse.body();
+
+        Elements p1 = body.select("p");
+        Elements p = body.getElementsByTag("p");
+
+        for (Element element : p) {
+            List<Node> childNodes = element.childNodes();
+            childNodes.forEach(this::printNode);
+        }
+    }
+
+    public void printNode(Node node){
+        if(node instanceof  Element){
+            Element child = (Element)node;
+            log.info("childNode instanceOf Element,TagName:{},Text:{}", child.tagName(), child.text());
+        }
+        if(node instanceof TextNode){
+            log.info("childNode instanceOf TextNode,TagName:{},Text:{}", node.nodeName(), ((TextNode) node).text());
+        }
+    }
+
 
 
 

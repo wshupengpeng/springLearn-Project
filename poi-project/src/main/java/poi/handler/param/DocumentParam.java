@@ -1,5 +1,6 @@
 package poi.handler.param;
 
+import com.deepoove.poi.data.style.Style;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.apache.poi.xwpf.usermodel.*;
@@ -34,13 +35,18 @@ public class DocumentParam {
     private XWPFDocument doc;
 
     /**
-     * 是否继续迭代子节点
+     * 是否跳过迭代子节点
      */
-    private Boolean continueItr = true;
+    private Boolean continueItr = false;
     /**
      * 其他可能需要的业务参数
      */
     private Object extendParams;
+
+    /**
+     *  字体类型
+     */
+    private Style style;
 
     /**
      * 段落第一个标签不用换行

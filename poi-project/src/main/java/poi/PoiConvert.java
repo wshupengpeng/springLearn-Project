@@ -124,21 +124,22 @@ public class PoiConvert {
     public void createTable() throws IOException {
         XWPFDocument xwpfDocument = new XWPFDocument();
         List<String[]> tableList = createTableList();
-//        XWPFTable table = xwpfDocument.createTable(tableList.size(), tableList.get(0).length);
-        XWPFTable table = xwpfDocument.createTable();
+        XWPFTable table = xwpfDocument.createTable(tableList.size(), tableList.get(0).length);
+//        XWPFTable table = xwpfDocument.createTable();
         CTTbl ctTbl = table.getCTTbl();
         CTTblPr tblPr = ctTbl.getTblPr();
         CTTblLayoutType ctTblLayoutType = tblPr.addNewTblLayout();
         ctTblLayoutType.setType(STTblLayoutType.AUTOFIT);
         CTRow ctRow = ctTbl.addNewTr();
-        XWPFTableRow xwpfTableRow = new XWPFTableRow(ctRow,table);
-        table.addRow(xwpfTableRow);
+//        XWPFTableRow xwpfTableRow = new XWPFTableRow(ctRow,table);
+//        table.addRow(xwpfTableRow);
         // 填充数据
         int length = tableList.size();
-        for (int i = 0; i < 1; i++) {
+        for (int i = 0; i < 10; i++) {
             XWPFTableRow row = table.getRow(i);
             List<XWPFTableCell> cells = row.getTableCells();
             for (int j = 0; j < cells.size(); j++) {
+//                cells.get(j).addParagraph().createRun().setText(tableList.get(i)[j]);
                 cells.get(j).setText(tableList.get(i)[j]);
             }
         }
