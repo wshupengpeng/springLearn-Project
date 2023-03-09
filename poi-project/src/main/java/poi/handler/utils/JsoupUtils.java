@@ -31,7 +31,7 @@ public class JsoupUtils {
             }
 
             if(split.contains(PoiCommon.FONT_COLOR)){
-                style.setColor(split);
+                style.setColor(rgbToHex(split));
             }
         }
         return style;
@@ -43,20 +43,30 @@ public class JsoupUtils {
 //        System.out.println(matches);
 //        boolean matches = regex.matches("(^[0-9]+[,)])");
 //        System.out.println(matches);
-        rgbToHex(input);
+        String s = rgbToHex(input);
+        System.out.println(Color.decode(s));
+//        Color color = new Color(231,95,51);
+//        String format = String.format("#%02X%02X%02X", 231, 95, 51);
+//        System.out.println(format);
+//
+//        Color decode = Color.decode(format);
+//        System.out.println(decode);
     }
 
     public static String rgbToHex(String colorAttribute){
         Pattern pattern = Pattern.compile("(\\d+)");
         Matcher matcher = pattern.matcher(colorAttribute);
 
-        matcher.start();
         int[] rgb = new int[3];
         int i = 0;
         while(matcher.find()){
             rgb[i++] = Integer.parseInt(matcher.group());
         }
-        Color color = new Color(rgb[0], rgb[1], rgb[2]);
+
+        // 代表三色参数都在
+        if(i == 3){
+            return String.format("#%02X%02X%02X", rgb[0], rgb[1], rgb[2]);
+        }
         return null;
     }
 

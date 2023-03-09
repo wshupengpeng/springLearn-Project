@@ -21,4 +21,6 @@ public class PoiCommon {
 
     public static final String SEMICOLON = ";";
 
+    public static final String STYLE_ATTRIBUTE_KEY = "style";
+
 }
