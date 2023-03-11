@@ -1,6 +1,5 @@
 package poi.handler.impl;
 
-import com.deepoove.poi.data.style.Style;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.nodes.Node;
 import poi.handler.AbstractHtmlTagHandler;

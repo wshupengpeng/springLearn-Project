@@ -8,8 +8,10 @@ import com.deepoove.poi.util.TableTools;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.xwpf.usermodel.*;
 import org.jsoup.Jsoup;
-import org.jsoup.nodes.*;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.nodes.Node;
+import org.jsoup.nodes.TextNode;
 import org.jsoup.select.Elements;
 import org.junit.After;
 import org.junit.Before;
@@ -17,11 +19,15 @@ import org.junit.Test;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTTblLayoutType;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.STMerge;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.STTblLayoutType;
+import poi.handler.common.PoiCommon;
+import poi.handler.utils.JsoupUtils;
 
+import java.awt.*;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @Description: poi基本操作学习
@@ -37,16 +43,23 @@ public class PoiBaseOperator {
 
     public static final String srcPath = "d://hpp//2.html";
 
+    public static final String srcPath_home = "d://测试数据/poi.html";
+
+    public static final String descPath_home = "d://测试数据/poi.doc";
+
+
     @Before
     public void before(){
-        File file = new File(descPath);
+//        File file = new File(descPath);
+        File file = new File(descPath_home);
         file.deleteOnExit();
     }
 
 
     @After
     public void after() throws IOException {
-        doc.write(new FileOutputStream(descPath));
+//        doc.write(new FileOutputStream(descPath));
+        doc.write(new FileOutputStream(descPath_home));
     }
 
     @Test
@@ -253,6 +266,67 @@ public class PoiBaseOperator {
     }
 
 
+    @Test
+    public void parseStyle() throws IOException{
+        Document parse = Jsoup.parse(new File(srcPath_home));
 
+        Element body = parse.body();
+
+        Elements allPTag = body.getElementsByTag("p");
+
+        // 创建段落
+        XWPFParagraph xwpfParagraph = doc.createParagraph();
+        assert xwpfParagraph != null;
+
+//        for (Element element : allPTag) {
+//            element.childNodes().forEach(this::printNode);
+            Elements span = body.getElementsByTag("span");
+
+            String styleAttr = span.attr("style");
+
+            Elements strong = body.getElementsByTag("strong");
+
+            Style style = JsoupUtils.parseStyle(styleAttr);
+            XWPFRun run = xwpfParagraph.createRun();
+
+            TextRenderPolicy.Helper.renderTextRun(run,
+                new TextRenderData(strong.text(),
+                        Optional.ofNullable(style).orElse(PoiCommon.DEFAULT_STYLE)));
+            assert run != null;
+//            run.setBold(style.isBold());
+            run.setColor(style.getColor().replaceAll("#",""));
+            run.setText(strong.text());
+//            run.setUnderline(style.isUnderLine());
+//        }
+
+
+    }
+
+    @Test
+    public void createTable() throws IOException {
+        Document parse = Jsoup.parse(new File(srcPath_home));
+        Element body = parse.body();
+        Elements table = body.getElementsByTag("table");
+        Element element = table.get(0);
+        Elements th = element.getElementsByTag("th");
+        Elements tr = element.getElementsByTag("tr");
+        XWPFTable xwpfTable = doc.createTable(tr.size(), th.size());
+
+        Elements tbody = element.getElementsByTag("tr");
+
+        for (Node childNode : tbody.get(0).childNodes()) {
+           Element childEle =  (Element) childNode;
+
+            int rowspan = Integer.parseInt(childEle.attr("rowspan"));
+            int colspan = Integer.parseInt(childEle.attr("colspan"));
+            // 方案一,获取所有colspan和rowspan之和后的实际行数和列数,而是按照行读取
+            // 直接在table中通过mergeCol和mergeRow进行合并
+            // 手动在table中添加
+
+
+            // 方案二,初始化之前，获取所有colspan和rowspan之和后的实际行数和列数,
+            // 通过获取实际列数和行数，通过mergeFlag进行合并操作
+        }
+    }
 
 }
