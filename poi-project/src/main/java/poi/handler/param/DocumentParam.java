@@ -99,4 +99,9 @@ public class DocumentParam {
     public void removeParagraph(){
         removeParagraph(null);
     }
+
+
+    public void resetStyle(){
+        style = null;
+    }
 }

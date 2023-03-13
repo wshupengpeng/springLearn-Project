@@ -28,6 +28,8 @@ public class PTagHandler extends AbstractHtmlTagHandler {
     public void handler(DocumentParam documentParam) {
         // 解析标签值
         Node currentNode = documentParam.getCurrentNode();
+        // p标签是块元素,如果有p标签则直接换行
+        documentParam.createRun().getCTR().addNewBr();
 //        if(currentNode instanceof TextNode){
 //            if(log.isDebugEnabled()){
 //                log.debug("解析p标签,解析内容：{}", ((TextNode) currentNode).getWholeText());
@@ -38,8 +40,6 @@ public class PTagHandler extends AbstractHtmlTagHandler {
 //        }else{
         List<Node> childNodes = currentNode.childNodes();
         childNodes.forEach(childNode -> HtmlToWordUtils.parseTagByName(documentParam, currentNode));
-        // p标签是块元素,如果有p标签则直接换行
-        documentParam.createRun().getCTR().addNewBr();
 //        }
         log.info("当前处理类：{},解析标签成功", this.getClass().getSimpleName());
     }

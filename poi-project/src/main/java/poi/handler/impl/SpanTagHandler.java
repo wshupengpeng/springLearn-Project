@@ -26,6 +26,8 @@ public class SpanTagHandler extends AbstractHtmlTagHandler {
         Node currentNode = documentParam.getCurrentNode();
         if(currentNode.hasAttr(PoiCommon.STYLE_ATTRIBUTE_KEY)){
             documentParam.setStyle(JsoupUtils.parseStyle(currentNode.attr(PoiCommon.STYLE_ATTRIBUTE_KEY)));
+        }else{
+            documentParam.resetStyle();
         }
         currentNode.childNodes().forEach(childNode -> HtmlToWordUtils.parseTagByName(documentParam, childNode));
     }
