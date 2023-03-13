@@ -53,6 +53,7 @@ public class HtmlToWordUtils {
         DocumentParam broParam = new DocumentParam();
         broParam.setDoc(documentParam.getDoc())
                 .setCurrentParagraph(documentParam.getCurrentParagraph())
+                .setStyle(documentParam.getStyle())
                 .setCurrentNode(node);
         AbstractHtmlTagHandler abstractHtmlTagHandler = HtmlToWordUtils.handlerMap.get(((Element) node).tagName());
         abstractHtmlTagHandler.handler(broParam);
