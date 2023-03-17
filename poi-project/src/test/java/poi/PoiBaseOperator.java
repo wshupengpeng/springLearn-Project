@@ -20,12 +20,14 @@ import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTTblLayoutType;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.STMerge;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.STTblLayoutType;
 import poi.handler.common.PoiCommon;
+import poi.handler.impl.TableTagHandler;
 import poi.handler.utils.JsoupUtils;
 
 import java.awt.*;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -50,16 +52,16 @@ public class PoiBaseOperator {
 
     @Before
     public void before(){
-//        File file = new File(descPath);
-        File file = new File(descPath_home);
+        File file = new File(descPath);
+//        File file = new File(descPath_home);
         file.deleteOnExit();
     }
 
 
     @After
     public void after() throws IOException {
-//        doc.write(new FileOutputStream(descPath));
-        doc.write(new FileOutputStream(descPath_home));
+        doc.write(new FileOutputStream(descPath));
+//        doc.write(new FileOutputStream(descPath_home));
     }
 
     @Test
@@ -114,7 +116,7 @@ public class PoiBaseOperator {
             }
         }
         // 合并表格,下标从0开始
-        TableTools.mergeCellsHorizonal(table,1,1,2);
+        TableTools.mergeCellsHorizonal(table,1,2,3);
         List<XWPFParagraph> paragraphs = doc.getParagraphs();
         paragraphs.forEach(p -> {
             String text1 = p.getParagraphText();
@@ -304,29 +306,32 @@ public class PoiBaseOperator {
 
     @Test
     public void createTable() throws IOException {
-        Document parse = Jsoup.parse(new File(srcPath_home));
+        Document parse = Jsoup.parse(new File(srcPath));
         Element body = parse.body();
         Elements table = body.getElementsByTag("table");
-        Element element = table.get(0);
-        Elements th = element.getElementsByTag("th");
-        Elements tr = element.getElementsByTag("tr");
-        XWPFTable xwpfTable = doc.createTable(tr.size(), th.size());
+//        Element element = table.get(0);
+//        Elements th = element.getElementsByTag("th");
+//        Elements tr = element.getElementsByTag("tr");
+//        XWPFTable xwpfTable = doc.createTable(tr.size(), th.size());
+//
+//        Elements tbody = element.getElementsByTag("tr");
+        Element tbody = table.first().getElementsByTag("tbody").first();
+        Elements tr = tbody.getElementsByTag("tr");
+        Iterator<Element> iterator = tr.iterator();
 
-        Elements tbody = element.getElementsByTag("tr");
-
-        for (Node childNode : tbody.get(0).childNodes()) {
-           Element childEle =  (Element) childNode;
-
-            int rowspan = Integer.parseInt(childEle.attr("rowspan"));
-            int colspan = Integer.parseInt(childEle.attr("colspan"));
-            // 方案一,获取所有colspan和rowspan之和后的实际行数和列数,而是按照行读取
-            // 直接在table中通过mergeCol和mergeRow进行合并
-            // 手动在table中添加
-
-
-            // 方案二,初始化之前，获取所有colspan和rowspan之和后的实际行数和列数,
-            // 通过获取实际列数和行数，通过mergeFlag进行合并操作
-        }
+//        for (Node childNode : tbody.get(0).childNodes()) {
+//           Element childEle =  (Element) childNode;
+//
+//            int rowspan = Integer.parseInt(childEle.attr("rowspan"));
+//            int colspan = Integer.parseInt(childEle.attr("colspan"));
+//            // 方案一,获取所有colspan和rowspan之和后的实际行数和列数,而是按照行读取
+//            // 直接在table中通过mergeCol和mergeRow进行合并
+//            // 手动在table中添加
+//
+//
+//            // 方案二,初始化之前，获取所有colspan和rowspan之和后的实际行数和列数,
+//            // 通过获取实际列数和行数，通过mergeFlag进行合并操作
+//        }
     }
 
 }
