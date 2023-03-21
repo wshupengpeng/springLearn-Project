@@ -1,6 +1,7 @@
 package com.websocket.handler;
 
 import com.alibaba.fastjson.JSONObject;
+import com.websocket.util.WebSocketSessionManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
@@ -35,6 +36,9 @@ public class DefaultHandler implements WebSocketHandler {
     public void afterConnectionEstablished(WebSocketSession webSocketSession) throws Exception {
         String acceptedProtocol = webSocketSession.getAcceptedProtocol();
         Map<String, Object> attributes = webSocketSession.getAttributes();
+        webSocketSession.getHandshakeHeaders().forEach((k,v)->{
+            log.info("建立链接请求头key:{},value:{}", k, v);
+        });
         int binaryMessageSizeLimit = webSocketSession.getBinaryMessageSizeLimit();
         List<WebSocketExtension> extensions = webSocketSession.getExtensions();
         HttpHeaders handshakeHeaders = webSocketSession.getHandshakeHeaders();
@@ -42,6 +46,7 @@ public class DefaultHandler implements WebSocketHandler {
         Principal principal = webSocketSession.getPrincipal();
         log.info("acceptedProtocol:{},attributes:{},binaryMessageSizeLimit:{},extensions:{},handshakeHeaders:{},localAddress:{},principal{}",
                 acceptedProtocol, attributes, binaryMessageSizeLimit, extensions, handshakeHeaders, localAddress, principal);
+        WebSocketSessionManager.add("test",webSocketSession);
     }
 
     /**

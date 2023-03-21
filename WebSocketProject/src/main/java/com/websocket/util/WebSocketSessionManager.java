@@ -61,4 +61,12 @@ public class WebSocketSessionManager {
         return SESSION_POOL.get(key);
     }
 
+    /**
+     *  获取所有会话
+     * @return
+     */
+    public static Map<String,WebSocketSession> getSessionPool(){
+        return SESSION_POOL;
+    }
+
 }
