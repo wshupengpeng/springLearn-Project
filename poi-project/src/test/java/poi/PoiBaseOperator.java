@@ -52,16 +52,24 @@ public class PoiBaseOperator {
 
     @Before
     public void before(){
-        File file = new File(descPath);
-//        File file = new File(descPath_home);
+//        File file = new File(descPath);
+        File file = new File(descPath_home);
         file.deleteOnExit();
     }
 
 
     @After
     public void after() throws IOException {
-        doc.write(new FileOutputStream(descPath));
-//        doc.write(new FileOutputStream(descPath_home));
+//        doc.write(new FileOutputStream(descPath));
+        doc.write(new FileOutputStream(descPath_home));
+    }
+
+    @Test
+    public void writerDoc(){
+        XWPFParagraph paragraph = doc.createParagraph();
+        paragraph.createRun().setText("test");
+        XWPFTable table = doc.createTable();
+//        doc.insertTable(1,table);
     }
 
     @Test
@@ -72,35 +80,36 @@ public class PoiBaseOperator {
         // 对齐方式
         xwpfParagraph.setAlignment(ParagraphAlignment.CENTER);
         // 边框
-        xwpfParagraph.setBorderBottom(Borders.DOUBLE);
-        xwpfParagraph.setBorderTop(Borders.DOUBLE);
-        xwpfParagraph.setBorderRight(Borders.DOUBLE);
-        xwpfParagraph.setBorderLeft(Borders.DOUBLE);
-        xwpfParagraph.setBorderBetween(Borders.SINGLE);
+//        xwpfParagraph.setBorderBottom(Borders.DOUBLE);
+//        xwpfParagraph.setBorderTop(Borders.DOUBLE);
+//        xwpfParagraph.setBorderRight(Borders.DOUBLE);
+//        xwpfParagraph.setBorderLeft(Borders.DOUBLE);
+//        xwpfParagraph.setBorderBetween(Borders.SINGLE);
 
 
         // 基本操作元素
         XWPFRun xwpfRun = xwpfParagraph.createRun();
         // 在当前段落中插入文本
-        xwpfRun.setBold(true);
-        xwpfRun.setColor("67C359");
-        xwpfRun.setItalic(true);
-        xwpfRun.setShadow(true);
-        xwpfRun.setFontSize(20);
+//        xwpfRun.setBold(true);
+//        xwpfRun.setColor("67C359");
+//        xwpfRun.setItalic(true);
+//        xwpfRun.setShadow(true);
+//        xwpfRun.setFontSize(20);
+        xwpfRun.setText("你好");
         // 获取文字
-        String text = xwpfParagraph.getText();
+//        String text = xwpfParagraph.getText();
 
         // 操作表格
         // 获取当前段落的run基本操作对象
         XWPFTable table = doc.createTable(5, 5);
-        doc.insertTable(1,table);
+//        doc.insertTable(1,table);
         // 设置表格宽度
-        XWPFParagraph xwpfParagraph1 = table.getRow(0).getCell(0).addParagraph();
-        xwpfParagraph1.setAlignment(ParagraphAlignment.CENTER);
-        XWPFRun run1 = xwpfParagraph1.createRun();
-        TextRenderPolicy.Helper.renderTextRun(run1, new TextRenderData(text, new Style()));
-        CTTblLayoutType type = table.getCTTbl().getTblPr().addNewTblLayout();
-        type.setType(STTblLayoutType.AUTOFIT);
+//        XWPFParagraph xwpfParagraph1 = table.getRow(0).getCell(0).addParagraph();
+//        xwpfParagraph1.setAlignment(ParagraphAlignment.CENTER);
+//        XWPFRun run1 = xwpfParagraph1.createRun();
+//        TextRenderPolicy.Helper.renderTextRun(run1, new TextRenderData(text, new Style()));
+//        CTTblLayoutType type = table.getCTTbl().getTblPr().addNewTblLayout();
+//        type.setType(STTblLayoutType.AUTOFIT);
         //设置整个表格大小
         TableTools.widthTable(table, MiniTableRenderData.WIDTH_A4_FULL, 5);
         for (int i = 0; i < 5; i++) {
