@@ -35,9 +35,9 @@ public class DefaultInterceptor implements HandshakeInterceptor {
         log.info("--------- webSocket handshake begin  -----------");
         log.info("--------- remote address is :{} -------",serverHttpRequest.getRemoteAddress());
         // 1 获取用户当前token
-        String submitedToken = serverHttpRequest.getHeaders().get("sec-websocket-protocol").get(0);
+//        String submitedToken = serverHttpRequest.getHeaders().get("sec-websocket-protocol").get(0);
         HttpHeaders headers = serverHttpResponse.getHeaders();
-        headers.set("sec-websocket-protocol",submitedToken);
+//        headers.set("sec-websocket-protocol",submitedToken);
         map.put("attribute","123");
         log.info("webSocket beforeHandshake begin,map:{}",map);
 //        throw new RuntimeException("handshake failed");
