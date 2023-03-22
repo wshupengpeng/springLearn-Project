@@ -89,8 +89,10 @@ public class TableTagHandler extends AbstractHtmlTagHandler {
 
                         if(mergeMap.getOrDefault(rowNum,Boolean.FALSE) || cellNum != 0){
                             cell.getCTTc().getTcPr().addNewHMerge().setVal(STMerge.CONTINUE);
+                            log.info("row:{},col:{},val:{}",i + rowOffset + rowNum,j + colOffset + cellNum,"continue");
                         }else{
                             cell.getCTTc().getTcPr().addNewHMerge().setVal(STMerge.RESTART);
+                            log.info("row:{},col:{},val:{}",i + rowOffset + rowNum,j + colOffset + cellNum,"restart");
                         }
                     }
                 }
@@ -110,6 +112,8 @@ public class TableTagHandler extends AbstractHtmlTagHandler {
         }
         //设置整个表格大小
         TableTools.widthTable(table, MiniTableRenderData.WIDTH_A4_FULL, table.getRows().get(0).getTableCells().size());
+
+        documentParam.setCurrentParagraph(documentParam.getDoc().createParagraph());
         // 汇总行列
 //        int row = tr.size();
 //

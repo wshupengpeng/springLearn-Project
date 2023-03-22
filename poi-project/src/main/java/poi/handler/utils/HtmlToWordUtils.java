@@ -50,7 +50,7 @@ public class HtmlToWordUtils {
         documentParam.setCurrentNode(body);
         documentParam.setDoc(doc);
         documentParam.setCurrentParagraph(doc.createParagraph());
-        documentParam.createRun();
+//        documentParam.createRun();
         // 获取处理类
         AbstractHtmlTagHandler abstractHtmlTagHandler = handlerMap.get(body.tagName());
         abstractHtmlTagHandler.handler(documentParam);
@@ -63,18 +63,19 @@ public class HtmlToWordUtils {
             log.info("跳过子节点迭代");
             return;
         }
-        DocumentParam broParam = new DocumentParam();
-        broParam.setDoc(documentParam.getDoc())
-                .setCurrentParagraph(documentParam.getCurrentParagraph())
-                .setStyle(documentParam.getStyle())
-                .setCurrentRun(documentParam.getCurrentRun())
-                .setCurrentNode(node);
+//        DocumentParam broParam = new DocumentParam();
+//        broParam.setDoc(documentParam.getDoc())
+//                .setCurrentParagraph(documentParam.getCurrentParagraph())
+//                .setStyle(documentParam.getStyle())
+//                .setCurrentRun(documentParam.getCurrentRun())
+//                .setCurrentNode(node);
+        documentParam.setCurrentNode(node);
         AbstractHtmlTagHandler abstractHtmlTagHandler = HtmlToWordUtils.handlerMap.get("");
         if(node instanceof Element){
             abstractHtmlTagHandler = HtmlToWordUtils.handlerMap.get(((Element) node).tagName());
             log.info("tagName:{}",((Element) node).tagName());
         }
-        abstractHtmlTagHandler.handler(broParam);
+        abstractHtmlTagHandler.handler(documentParam);
     }
 
 }

@@ -53,23 +53,23 @@ public class PoiBaseOperator {
 
     @Before
     public void before(){
-//        File file = new File(descPath);
-        File file = new File(descPath_home);
+        File file = new File(descPath);
+//        File file = new File(descPath_home);
         file.deleteOnExit();
     }
 
 
     @After
     public void after() throws IOException {
-//        doc.write(new FileOutputStream(descPath));
-        doc.write(new FileOutputStream(descPath_home));
+        doc.write(new FileOutputStream(descPath));
+//        doc.write(new FileOutputStream(descPath_home));
     }
 
     @Test
     public void writerDoc(){
         XWPFParagraph paragraph = doc.createParagraph();
-        paragraph.createRun().setText("test");
         XWPFTable table = doc.createTable();
+        paragraph.createRun().setText("test");
 //        doc.insertTable(1,table);
     }
 
