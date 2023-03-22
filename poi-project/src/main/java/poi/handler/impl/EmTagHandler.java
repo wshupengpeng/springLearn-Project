@@ -16,6 +16,11 @@ import java.util.Optional;
 
 @Slf4j
 public class EmTagHandler extends AbstractHtmlTagHandler {
+
+    public EmTagHandler() {
+        HtmlToWordUtils.put(getTagName(),this);
+    }
+
     @Override
     public String getTagName() {
         return "em";

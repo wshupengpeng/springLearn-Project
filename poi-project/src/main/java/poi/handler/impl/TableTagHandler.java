@@ -1,5 +1,7 @@
 package poi.handler.impl;
 
+import com.deepoove.poi.data.MiniTableRenderData;
+import com.deepoove.poi.util.TableTools;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFTable;
@@ -22,6 +24,10 @@ import java.util.*;
  */
 @Slf4j
 public class TableTagHandler extends AbstractHtmlTagHandler {
+    public TableTagHandler() {
+        HtmlToWordUtils.put(getTagName(),this);
+    }
+
     @Override
     public String getTagName() {
         return "table";
@@ -41,7 +47,6 @@ public class TableTagHandler extends AbstractHtmlTagHandler {
 
 
         List<List<Element>> rowElementList = getRowElementList(tr);
-
         XWPFTable table = documentParam.getDoc().createTable();
         // 方式一,按照rowspan和colspan的值进行手动创建cell单元格
         int rowOffset = 0;
@@ -58,11 +63,12 @@ public class TableTagHandler extends AbstractHtmlTagHandler {
 
                 if ((xwpfTableRow = table.getRow(i + rowOffset)) == null) {
                     xwpfTableRow = table.insertNewTableRow(i);
-                    if (rowspan > 1) {
-                        for (int rowNum = 1; rowNum < rowspan; rowNum++) {
-                            xwpfTableRow = table.insertNewTableRow(rowNum + i + rowOffset);
-                            mergeMap.put(rowNum, Boolean.TRUE);
-                        }
+                }
+
+                if (rowspan > 1) {
+                    for (int rowNum = 1; rowNum < rowspan; rowNum++) {
+                        xwpfTableRow = table.insertNewTableRow(rowNum + i + rowOffset);
+                        mergeMap.put(rowNum, Boolean.TRUE);
                     }
                 }
 
@@ -72,20 +78,19 @@ public class TableTagHandler extends AbstractHtmlTagHandler {
                     for(int cellNum = 0; cellNum < colspan; cellNum++){
                         if ((cell = xwpfTableRow.getCell(j + colOffset + cellNum)) == null) {
                             cell = xwpfTableRow.createCell();
+                        }
+                        if(cell.getCTTc().getTcPr() == null) {
+                            cell.getCTTc().addNewTcPr();
+                        }
 
-                            if(cell.getCTTc().getTcPr() == null) {
-                                cell.getCTTc().addNewTcPr();
-                            }
+                        if(cell.getCTTc().getTcPr().getHMerge() == null){
+                            cell.getCTTc().getTcPr().addNewHMerge();
+                        }
 
-                            if(cell.getCTTc().getTcPr().getHMerge() == null){
-                                cell.getCTTc().getTcPr().addNewHMerge();
-                            }
-
-                            if(mergeMap.getOrDefault(rowNum,Boolean.FALSE)){
-                                cell.getCTTc().getTcPr().addNewHMerge().setVal(STMerge.CONTINUE);
-                            }else{
-                                cell.getCTTc().getTcPr().addNewHMerge().setVal(STMerge.RESTART);
-                            }
+                        if(mergeMap.getOrDefault(rowNum,Boolean.FALSE) || cellNum != 0){
+                            cell.getCTTc().getTcPr().addNewHMerge().setVal(STMerge.CONTINUE);
+                        }else{
+                            cell.getCTTc().getTcPr().addNewHMerge().setVal(STMerge.RESTART);
                         }
                     }
                 }
@@ -103,7 +108,8 @@ public class TableTagHandler extends AbstractHtmlTagHandler {
                 colOffset += colspan-1;
             }
         }
-
+        //设置整个表格大小
+        TableTools.widthTable(table, MiniTableRenderData.WIDTH_A4_FULL, table.getRows().get(0).getTableCells().size());
         // 汇总行列
 //        int row = tr.size();
 //
@@ -124,6 +130,13 @@ public class TableTagHandler extends AbstractHtmlTagHandler {
                     row.add(element);
                 });
             }
+            Elements td = next.select("td");
+            if(!td.isEmpty()){
+                td.stream().forEach(element -> {
+                    row.add(element);
+                });
+            }
+            rowList.add(row);
         }
         return rowList;
     }

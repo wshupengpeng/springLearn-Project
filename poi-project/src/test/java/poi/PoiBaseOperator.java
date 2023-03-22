@@ -21,12 +21,13 @@ import org.openxmlformats.schemas.wordprocessingml.x2006.main.STMerge;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.STTblLayoutType;
 import poi.handler.common.PoiCommon;
 import poi.handler.impl.TableTagHandler;
+import poi.handler.utils.HtmlToWordUtils;
 import poi.handler.utils.JsoupUtils;
+import sun.security.krb5.internal.PAData;
 
 import java.awt.*;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
@@ -305,6 +306,14 @@ public class PoiBaseOperator {
     }
 
     @Test
+    public void parseHtml() throws Exception {
+        Document parse = Jsoup.parse(new File(srcPath));
+        XWPFDocument xwpfDocument = HtmlToWordUtils.parseHtmlToWord(parse.outerHtml());
+        xwpfDocument.write(new FileOutputStream("d://hpp//test1.doc"));
+    }
+
+
+    @Test
     public void createTable() throws IOException {
         Document parse = Jsoup.parse(new File(srcPath));
         Element body = parse.body();
@@ -318,7 +327,6 @@ public class PoiBaseOperator {
         Element tbody = table.first().getElementsByTag("tbody").first();
         Elements tr = tbody.getElementsByTag("tr");
         Iterator<Element> iterator = tr.iterator();
-
 //        for (Node childNode : tbody.get(0).childNodes()) {
 //           Element childEle =  (Element) childNode;
 //

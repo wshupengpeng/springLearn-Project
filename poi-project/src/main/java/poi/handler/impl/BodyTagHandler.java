@@ -1,7 +1,6 @@
 package poi.handler.impl;
 
 import lombok.extern.slf4j.Slf4j;
-import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 import poi.handler.AbstractHtmlTagHandler;
 import poi.handler.param.DocumentParam;
@@ -16,6 +15,11 @@ import java.util.List;
  */
 @Slf4j
 public class BodyTagHandler extends AbstractHtmlTagHandler {
+
+    public BodyTagHandler() {
+        HtmlToWordUtils.put(getTagName(),this);
+    }
+
     @Override
     public String getTagName() {
         return "body";
@@ -35,12 +39,6 @@ public class BodyTagHandler extends AbstractHtmlTagHandler {
         Node broNode;
         while ((broNode = currentNode.nextSibling()) != null) {
             HtmlToWordUtils.parseTagByName(documentParam, broNode);
-//            if (broNode instanceof Element) {
-//                AbstractHtmlTagHandler abstractHtmlTagHandler = HtmlToWordUtils.handlerMap.get(((Element) broNode).tagName());
-//                abstractHtmlTagHandler.handler(broParam);
-//            } else {
-//                HtmlToWordUtils.handlerMap.get("").handler(broParam);
-//            }
         }
     }
 

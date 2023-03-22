@@ -1,9 +1,7 @@
 package poi.handler.impl;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.poi.xwpf.usermodel.XWPFRun;
 import org.jsoup.nodes.Node;
-import org.jsoup.nodes.TextNode;
 import poi.handler.AbstractHtmlTagHandler;
 import poi.handler.param.DocumentParam;
 import poi.handler.utils.HtmlToWordUtils;
@@ -18,6 +16,9 @@ import java.util.List;
 @Slf4j
 public class PTagHandler extends AbstractHtmlTagHandler {
 
+    public PTagHandler() {
+        HtmlToWordUtils.put(getTagName(),this);
+    }
 
     @Override
     public String getTagName() {
@@ -39,7 +40,7 @@ public class PTagHandler extends AbstractHtmlTagHandler {
 //            //todo 字体格式等设置
 //        }else{
         List<Node> childNodes = currentNode.childNodes();
-        childNodes.forEach(childNode -> HtmlToWordUtils.parseTagByName(documentParam, currentNode));
+        childNodes.forEach(childNode -> HtmlToWordUtils.parseTagByName(documentParam, childNode));
 //        }
         log.info("当前处理类：{},解析标签成功", this.getClass().getSimpleName());
     }

@@ -19,6 +19,10 @@ import java.util.Optional;
  */
 @Slf4j
 public class StrongTagHandler extends AbstractHtmlTagHandler {
+    public StrongTagHandler() {
+        HtmlToWordUtils.put(getTagName(),this);
+    }
+
     @Override
     public String getTagName() {
         return "strong";

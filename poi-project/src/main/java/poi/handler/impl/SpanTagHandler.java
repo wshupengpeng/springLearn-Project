@@ -15,6 +15,10 @@ import poi.handler.utils.JsoupUtils;
  */
 @Slf4j
 public class SpanTagHandler extends AbstractHtmlTagHandler {
+    public SpanTagHandler() {
+        HtmlToWordUtils.put(getTagName(),this);
+    }
+
     @Override
     public String getTagName() {
         return "span";

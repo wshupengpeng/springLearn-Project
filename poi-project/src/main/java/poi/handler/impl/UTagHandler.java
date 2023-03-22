@@ -19,6 +19,10 @@ import java.util.Optional;
  */
 @Slf4j
 public class UTagHandler extends AbstractHtmlTagHandler {
+    public UTagHandler() {
+        HtmlToWordUtils.put(getTagName(),this);
+    }
+
     @Override
     public String getTagName() {
         return "u";

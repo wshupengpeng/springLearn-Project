@@ -1,6 +1,8 @@
 package poi.handler.utils;
 
-import com.deepoove.poi.data.style.Style;
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.ClassUtil;
+import cn.hutool.core.util.ReflectUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.jsoup.Jsoup;
@@ -8,9 +10,9 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 import poi.handler.AbstractHtmlTagHandler;
-import poi.handler.common.PoiCommon;
 import poi.handler.param.DocumentParam;
 
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -27,8 +29,17 @@ public class HtmlToWordUtils {
         handlerMap.put(tagName, handler);
     }
 
+    static {
+        Set<Class<?>> classes = ClassUtil.scanPackageBySuper(ClassUtil.getPackage(AbstractHtmlTagHandler.class), AbstractHtmlTagHandler.class);
+        if (CollUtil.isNotEmpty(classes)) {
+            for (Class clazz:classes) {
+                AbstractHtmlTagHandler handler = (AbstractHtmlTagHandler) ReflectUtil.newInstance(clazz);
+                handlerMap.put(handler.getTagName(), handler);
+            }
+        }
+    }
 
-    public static void parseHtmlToWord(String content){
+    public static XWPFDocument parseHtmlToWord(String content){
         // 解析当前文本
         Document parse = Jsoup.parse(content);
         Element body = parse.body();
@@ -39,9 +50,11 @@ public class HtmlToWordUtils {
         documentParam.setCurrentNode(body);
         documentParam.setDoc(doc);
         documentParam.setCurrentParagraph(doc.createParagraph());
+        documentParam.createRun();
         // 获取处理类
         AbstractHtmlTagHandler abstractHtmlTagHandler = handlerMap.get(body.tagName());
         abstractHtmlTagHandler.handler(documentParam);
+        return doc;
     }
 
 
@@ -54,8 +67,13 @@ public class HtmlToWordUtils {
         broParam.setDoc(documentParam.getDoc())
                 .setCurrentParagraph(documentParam.getCurrentParagraph())
                 .setStyle(documentParam.getStyle())
+                .setCurrentRun(documentParam.getCurrentRun())
                 .setCurrentNode(node);
-        AbstractHtmlTagHandler abstractHtmlTagHandler = HtmlToWordUtils.handlerMap.get(((Element) node).tagName());
+        AbstractHtmlTagHandler abstractHtmlTagHandler = HtmlToWordUtils.handlerMap.get("");
+        if(node instanceof Element){
+            abstractHtmlTagHandler = HtmlToWordUtils.handlerMap.get(((Element) node).tagName());
+            log.info("tagName:{}",((Element) node).tagName());
+        }
         abstractHtmlTagHandler.handler(broParam);
     }
 

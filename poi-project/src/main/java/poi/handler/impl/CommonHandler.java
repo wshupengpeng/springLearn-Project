@@ -1,7 +1,6 @@
 package poi.handler.impl;
 
 import com.deepoove.poi.data.TextRenderData;
-import com.deepoove.poi.data.style.Style;
 import com.deepoove.poi.policy.TextRenderPolicy;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.nodes.Node;
@@ -9,6 +8,7 @@ import org.jsoup.nodes.TextNode;
 import poi.handler.AbstractHtmlTagHandler;
 import poi.handler.common.PoiCommon;
 import poi.handler.param.DocumentParam;
+import poi.handler.utils.HtmlToWordUtils;
 
 import java.util.Optional;
 
@@ -20,6 +20,10 @@ import java.util.Optional;
  */
 @Slf4j
 public class CommonHandler extends AbstractHtmlTagHandler {
+
+    public CommonHandler() {
+        HtmlToWordUtils.put(getTagName(),this);
+    }
 
     @Override
     public String getTagName() {
