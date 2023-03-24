@@ -49,31 +49,32 @@ public class TableTagHandler extends AbstractHtmlTagHandler {
         List<List<Element>> rowElementList = getRowElementList(tr);
         XWPFTable table = documentParam.getDoc().createTable();
         // 方式一,按照rowspan和colspan的值进行手动创建cell单元格
-        int rowOffset = 0;
-
+//        int colOffset = 0;
+//        int rowOffset = 0;
+        Map<Integer,Integer> offsetMap = new HashMap<>();
         for (int i = 0; i < rowElementList.size(); i++) {
             List<Element> row = rowElementList.get(i);
-            int colOffset = 0;
             for (int j = 0; j < row.size(); j++) {
+                int colOffset = offsetMap.getOrDefault(i, 0);
                 Element col = row.get(j);
                 int rowspan = Integer.parseInt(col.hasAttr("rowspan") ? col.attr("rowspan") : "1");
                 int colspan = Integer.parseInt(col.hasAttr("colspan") ? col.attr("colspan") : "1");
                 XWPFTableRow xwpfTableRow;
                 Map<Integer, Boolean> mergeMap = new HashMap();
 
-                if ((xwpfTableRow = table.getRow(i + rowOffset)) == null) {
+                if ((xwpfTableRow = table.getRow(i)) == null) {
                     xwpfTableRow = table.insertNewTableRow(i);
                 }
 
                 if (rowspan > 1) {
                     for (int rowNum = 1; rowNum < rowspan; rowNum++) {
-                        xwpfTableRow = table.insertNewTableRow(rowNum + i + rowOffset);
+                        xwpfTableRow = table.insertNewTableRow(rowNum + i );
                         mergeMap.put(rowNum, Boolean.TRUE);
                     }
                 }
 
                 for(int rowNum = 0; rowNum < rowspan; rowNum++){
-                    xwpfTableRow = table.getRow(i + rowOffset + rowNum);
+                    xwpfTableRow = table.getRow(i + rowNum);
                     XWPFTableCell cell;
                     for(int cellNum = 0; cellNum < colspan; cellNum++){
                         if ((cell = xwpfTableRow.getCell(j + colOffset + cellNum)) == null) {
@@ -89,16 +90,16 @@ public class TableTagHandler extends AbstractHtmlTagHandler {
 
                         if(mergeMap.getOrDefault(rowNum,Boolean.FALSE) || cellNum != 0){
                             cell.getCTTc().getTcPr().addNewHMerge().setVal(STMerge.CONTINUE);
-                            log.info("row:{},col:{},val:{}",i + rowOffset + rowNum,j + colOffset + cellNum,"continue");
+                            log.info("row:{},col:{},val:{}",i  + rowNum,j + colOffset + cellNum,"continue");
                         }else{
                             cell.getCTTc().getTcPr().addNewHMerge().setVal(STMerge.RESTART);
-                            log.info("row:{},col:{},val:{}",i + rowOffset + rowNum,j + colOffset + cellNum,"restart");
+                            log.info("row:{},col:{},val:{}",i  + rowNum,j + colOffset + cellNum,"restart");
                         }
                     }
                 }
 
                 // 添加数据
-                XWPFTableCell cell = table.getRow(i + rowOffset).getCell(j + colOffset);
+                XWPFTableCell cell = table.getRow(i).getCell(j + colOffset);
                 XWPFParagraph xwpfParagraph = cell.addParagraph();
                 DocumentParam tableDocumentParam = new DocumentParam();
                 tableDocumentParam.setStyle(documentParam.getStyle());
@@ -106,8 +107,13 @@ public class TableTagHandler extends AbstractHtmlTagHandler {
                 tableDocumentParam.setDoc(documentParam.getDoc());
                 HtmlToWordUtils.parseTagByName(tableDocumentParam, col);
 
-                rowOffset += rowspan-1;
-                colOffset += colspan-1;
+                // 更新偏移量
+                for(int k = 0; k < rowspan; k++){
+                    offsetMap.put(k, colspan-1);
+                }
+//                rowOffset += rowspan-1;
+//                colOffset += colspan-1;
+//                log.info("rowOffset:{},colOffset:{}", rowOffset, colOffset);
             }
         }
         //设置整个表格大小

@@ -54,7 +54,7 @@ public class WebSocketConfig implements WebSocketConfigurer {
     @Bean
     public TaskScheduler taskScheduler() {
         ThreadPoolTaskScheduler threadPoolScheduler = new ThreadPoolTaskScheduler();
-        threadPoolScheduler.setThreadNamePrefix("SockJS-");
+        threadPoolScheduler.setThreadNamePrefix("123-");
         threadPoolScheduler.setPoolSize(Runtime.getRuntime().availableProcessors());
         threadPoolScheduler.setRemoveOnCancelPolicy(true);
         return threadPoolScheduler;
