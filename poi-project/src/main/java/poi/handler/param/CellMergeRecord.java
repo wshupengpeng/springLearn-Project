@@ -10,5 +10,12 @@ import lombok.Data;
 @Data
 public class CellMergeRecord {
 
+    private Integer rowStartIndex;
+
+    private Integer rowEndIndex;
+
+    private Integer colStartIndex;
+
+    private Integer colEndIndex;
 
 }

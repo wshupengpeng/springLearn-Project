@@ -1,9 +1,12 @@
 package poi.handler.utils;
 
+import cn.hutool.core.lang.Assert;
 import com.deepoove.poi.data.style.Style;
+import org.jsoup.nodes.Element;
 import poi.handler.common.PoiCommon;
 
 import java.awt.*;
+import java.util.function.Function;
 import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -35,6 +38,14 @@ public class JsoupUtils {
             }
         }
         return style;
+    }
+
+    public static  <T> T getAttribute(Element element, String attrKey, Function<String, T> convertTypeFn, T defaultValue) {
+        Assert.notNull(convertTypeFn);
+        if (element.hasAttr(attrKey)) {
+            return convertTypeFn.apply(element.attr(attrKey));
+        }
+        return defaultValue;
     }
 
     public static void main(String[] args) {

@@ -317,7 +317,30 @@ public class PoiBaseOperator {
     @Test
     public void parseHtml() throws Exception {
         Document parse = Jsoup.parse(new File(srcPath));
+//        XWPFDocument xwpfDocument = new XWPFDocument();
         XWPFDocument xwpfDocument = HtmlToWordUtils.parseHtmlToWord(parse.outerHtml());
+//        XWPFTable table = xwpfDocument.createTable(3, 3);
+//        table.getRow(0).getCell(0).getCTTc().addNewTcPr().addNewHMerge().setVal(STMerge.RESTART);
+//        table.getRow(0).getCell(0).getCTTc().addNewTcPr().addNewVMerge().setVal(STMerge.RESTART);
+//
+//        table.getRow(0).getCell(1).getCTTc().addNewTcPr().addNewHMerge().setVal(STMerge.CONTINUE);
+//        table.getRow(0).getCell(1).getCTTc().addNewTcPr().addNewVMerge().setVal(STMerge.RESTART);
+////        table.getRow(0).getCell(1).getCTTc().addNewTcPr().addNewVMerge().setVal(STMerge.CONTINUE);
+//
+//        table.getRow(1).getCell(1).getCTTc().addNewTcPr().addNewHMerge().setVal(STMerge.CONTINUE);
+//        table.getRow(1).getCell(1).getCTTc().addNewTcPr().addNewVMerge().setVal(STMerge.CONTINUE);
+//
+//        table.getRow(1).getCell(0).getCTTc().addNewTcPr().addNewHMerge().setVal(STMerge.RESTART);
+////        table.getRow(1).getCell(0).getCTTc().addNewTcPr().addNewHMerge().setVal(STMerge.CONTINUE);
+//        table.getRow(1).getCell(0).getCTTc().addNewTcPr().addNewVMerge().setVal(STMerge.CONTINUE);
+//
+//        table.getRow(0).getCell(2).getCTTc().addNewTcPr().addNewHMerge().setVal(STMerge.RESTART);
+//        table.getRow(0).getCell(2).getCTTc().addNewTcPr().addNewVMerge().setVal(STMerge.RESTART);
+//
+//        table.getRow(1).getCell(2).getCTTc().addNewTcPr().addNewHMerge().setVal(STMerge.RESTART);
+//        table.getRow(1).getCell(2).getCTTc().addNewTcPr().addNewVMerge().setVal(STMerge.RESTART);
+
+//        TableTools.widthTable(table, MiniTableRenderData.WIDTH_A4_FULL, table.getRows().get(0).getTableCells().size());
         xwpfDocument.write(new FileOutputStream("d://hpp//test1.doc"));
     }
 
