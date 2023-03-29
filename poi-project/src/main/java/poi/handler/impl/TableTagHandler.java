@@ -94,13 +94,13 @@ public class TableTagHandler extends AbstractHtmlTagHandler {
             }
         }
 
-//        for (int i = 0; i < table.getRows().size(); i++) {
-//            for(int j = 0; j < table.getRow(i).getTableCells().size(); j++){
-//                log.info("i:{},j:{},HmergeValue:{},VmergeValue:{}", i, j,
-//                        table.getRow(i).getCell(j).getCTTc().getTcPr().getHMerge().getVal().toString(),
-//                        table.getRow(i).getCell(j).getCTTc().getTcPr().getVMerge().getVal());
-//            }
-//        }
+        for (int i = 0; i < table.getRows().size(); i++) {
+            for(int j = 0; j < table.getRow(i).getTableCells().size(); j++){
+                log.info("i:{},j:{},HmergeValue:{},VmergeValue:{}", i, j,
+                        table.getRow(i).getCell(j).getCTTc().getTcPr().getHMerge().getVal().toString(),
+                        table.getRow(i).getCell(j).getCTTc().getTcPr().getVMerge().getVal());
+            }
+        }
 
         // 方式一,按照rowspan和colspan的值进行手动创建cell单元格
 //        int colOffset = 0;
@@ -221,10 +221,10 @@ public class TableTagHandler extends AbstractHtmlTagHandler {
         List<CellMergeRecord> mergeRecordList = new ArrayList<>();
         // 记录rowspan和colspan 占位记录
         Map<String,Integer> placeholderMap = new HashMap<>();
-
         for (int i = 0; i < rowElementList.size(); i++) {
             List<Element> cols = rowElementList.get(i);
             int colOffset = 0;
+            int placeholderIndex = 0;
             for (int j = 0; j < cols.size(); j++) {
                 Element element = cols.get(j);
                 // 获取rowspan和colspan
@@ -239,7 +239,7 @@ public class TableTagHandler extends AbstractHtmlTagHandler {
                     xwpfTableRow = table.insertNewTableRow(i);
                 }
 
-                String placeholderKey = "";
+                String placeholderKey =  String.format("%s-%s", i, j + colOffset);
                 if (rowSpan > 1 || colSpan > 1) {
                     // 合并单元格记录,为下一步合并做准备
                     CellMergeRecord cellMergeRecord = new CellMergeRecord();
@@ -253,16 +253,8 @@ public class TableTagHandler extends AbstractHtmlTagHandler {
                         if(row == 0){
                             for (int col = 0; col < colSpan; col++) {
                                 // placeholderKey 是记录startRow 和 colStart 的位置
-                                placeholderKey = String.format("%s-%s", row, col + colOffset);
-                                ceateMergeCell(placeholderMap, i, xwpfTableRow, placeholderKey);
-//                                placeholderKey = String.format("%s-%s", row, col + colOffset);
-//                                if (placeholderMap.containsKey(placeholderKey)) {
-//                                    // 如果placeholderMap 有当前记录,则获取colEndIndex添加单元格
-//                                    Integer colEndIndex = placeholderMap.get(placeholderKey);
-//                                    addCell(placeholderKey, colEndIndex, xwpfTableRow);
-//                                } else {
-//                                    setMergeEnum(xwpfTableRow.createCell(), STMerge.RESTART);
-//                                }
+                                placeholderKey = String.format("%s-%s", row, col + j + colOffset);
+                                placeholderIndex = ceateMergeCell(placeholderMap, i, xwpfTableRow, placeholderKey);
                             }
                         }else{
                             // 记录下一行需要添加的单元格位置
@@ -271,34 +263,13 @@ public class TableTagHandler extends AbstractHtmlTagHandler {
                         }
                     }
                 } else {
-
-                    placeholderKey = String.format("%s-%s", i, j + colOffset);
-                    ceateMergeCell(placeholderMap, i, xwpfTableRow, placeholderKey);
-//                    while (placeholderMap.containsKey(placeholderKey)) {
-//                        // 如果placeholderMap 有当前记录,则获取colEndIndex添加单元格
-//                        Integer colEndIndex = placeholderMap.get(placeholderKey);
-//                        addCell(placeholderKey, colEndIndex, xwpfTableRow);
-//                        placeholderKey = String.format("%s-%s", i, colEndIndex);
-//                    }
-//                    setMergeEnum(xwpfTableRow.createCell(), STMerge.RESTART);
-
-//                    placeholderKey = String.format("%s-%s", i, j + colOffset);
-//                    if (placeholderMap.containsKey(placeholderKey)) {
-//                        while(placeholderMap.containsKey(placeholderKey)){
-//                            // 如果placeholderMap 有当前记录,则获取colEndIndex添加单元格
-//                            Integer colEndIndex = placeholderMap.get(placeholderKey);
-//                            addCell(placeholderKey, colEndIndex, xwpfTableRow);
-//                            placeholderKey = String.format("%s-%s", i, colEndIndex + 1);
-//                        }
-//                    } else {
-//                        setMergeEnum(xwpfTableRow.createCell(), STMerge.RESTART);
-//                    }
+                    placeholderIndex = ceateMergeCell(placeholderMap, i, xwpfTableRow, placeholderKey);
                 }
-                // 添加数据
-                placeholderKey = String.format("%s-%s", i, j + colOffset);
-//                XWPFTableCell cell = table.getRow(i).getCell(j + colOffset + placeholderMap.getOrDefault(placeholderKey, 0));
-                XWPFTableCell cell = table.getRow(i).getTableCells().get(table.getRow(i).getTableCells().size() - 1);
-//                log.info("i:{},col:{},value:{}", i, j + colOffset + placeholderMap.getOrDefault(placeholderKey, 0),element.text());
+
+
+                XWPFTableCell cell = xwpfTableRow.getCell(placeholderIndex == 0 ? j + colOffset : placeholderIndex);
+//                XWPFTableCell cell = table.getRow(i).getTableCells().get(table.getRow(i).getTableCells().size() - 1);
+                log.info("i:{},col:{},value:{}", i, placeholderIndex == 0 ? j + colOffset : placeholderIndex,element.text());
                 XWPFParagraph xwpfParagraph = cell.addParagraph();
                 DocumentParam tableDocumentParam = new DocumentParam();
                 tableDocumentParam.setStyle(documentParam.getStyle());
@@ -306,21 +277,24 @@ public class TableTagHandler extends AbstractHtmlTagHandler {
                 tableDocumentParam.setDoc(documentParam.getDoc());
                 HtmlToWordUtils.parseTagByName(tableDocumentParam, element);
 
-                colOffset += (colSpan - 1 + placeholderMap.getOrDefault(placeholderKey, 0));
+                colOffset += (colSpan - 1 + placeholderIndex);
             }
         }
 
         return mergeRecordList;
     }
 
-    private void ceateMergeCell(Map<String, Integer> placeholderMap, int row, XWPFTableRow xwpfTableRow, String placeholderKey) {
+    private int ceateMergeCell(Map<String, Integer> placeholderMap, int row, XWPFTableRow xwpfTableRow, String placeholderKey) {
+        int colEndIndex = 0;
         while (placeholderMap.containsKey(placeholderKey)) {
             // 如果placeholderMap 有当前记录,则获取colEndIndex添加单元格
-            Integer colEndIndex = placeholderMap.get(placeholderKey);
+            colEndIndex = placeholderMap.get(placeholderKey);
             addCell(placeholderKey, colEndIndex, xwpfTableRow);
-            placeholderKey = String.format("%s-%s", row, colEndIndex + 1);
+            placeholderMap.remove(placeholderKey);
+            placeholderKey = String.format("%s-%s", row, colEndIndex);
         }
         setMergeEnum(xwpfTableRow.createCell(), STMerge.RESTART);
+        return colEndIndex;
     }
 
     private void addCell(String placeholderKey,Integer colEndIndex, XWPFTableRow xwpfTableRow) {
