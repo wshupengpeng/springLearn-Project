@@ -1,6 +1,18 @@
 package poi.handler;
 
+import com.deepoove.poi.util.StyleUtils;
+import org.jsoup.nodes.Node;
+import poi.handler.common.PoiCommon;
 import poi.handler.param.DocumentParam;
+import poi.handler.param.TextFormatStyle;
+import poi.handler.resolver.HandlerArgumentResolver;
+import poi.handler.utils.JsoupUtils;
+import poi.handler.utils.ObjectUtils;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 /**
  * @Description:
@@ -17,13 +29,54 @@ import poi.handler.param.DocumentParam;
  */
 public abstract class AbstractHtmlTagHandler {
 
+    public static List<HandlerArgumentResolver> resolverList = new ArrayList<>();
+
     /**
      * 获取当前处理类可以处理的tag标签
      * @return
      */
     public abstract String getTagName() ;
 
+    public void handler(DocumentParam documentParam){
+        onPreHandler(documentParam);
+        doHandler(documentParam);
+        onAfterHandler(documentParam);
+    }
 
-    public abstract void handler(DocumentParam documentParam);
+    public abstract void doHandler(DocumentParam documentParam);
+
+    public void onPreHandler(DocumentParam documentParam){
+        // 解析style属性
+        resolverList.stream().forEach(resolver->{
+            if(resolver.isSupport(documentParam.getCurrentNode())) {
+                resolver.resolveArgument(documentParam);
+            }
+        });
+
+//        Node currentNode = documentParam.getCurrentNode();
+//        if (currentNode.hasAttr(PoiCommon.STYLE_ATTRIBUTE_KEY)) {
+//            TextFormatStyle textFormatStyle = JsoupUtils.parseStyle(currentNode.attr(PoiCommon.STYLE_ATTRIBUTE_KEY));
+//            if(Objects.isNull(documentParam.getCurrentRun())){
+//                documentParam.createRun();
+//            }
+//
+//            StyleUtils.styleRun(documentParam.getCurrentRun(), ObjectUtils.getFirstNonNull(textFormatStyle.getStyle(),
+//                    Optional.ofNullable(documentParam.getParentStyle()).ifPresent();));
+//
+//            documentParam.getCurrentParagraph().setAlignment(documentParam.getStyle().getParagraphAlignment());
+
+//            if (Objects.isNull(documentParam.getStyle()) || Objects.isNull(documentParam.getCurrentRun())) {
+//                documentParam.setStyle(JsoupUtils.parseStyle(currentNode.attr(PoiCommon.STYLE_ATTRIBUTE_KEY)));
+//            }else{
+//                documentParam.getCurrentParagraph().setAlignment(documentParam.getStyle().getParagraphAlignment());
+//                StyleUtils.styleRun(documentParam.getCurrentRun(), documentParam.getStyle().getStyle());
+//            }
+//        }
+    }
+
+
+    public void onAfterHandler(DocumentParam documentParam){
+
+    };
 
 }

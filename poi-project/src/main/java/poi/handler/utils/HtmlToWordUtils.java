@@ -9,11 +9,16 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
+import org.jsoup.nodes.TextNode;
 import poi.handler.AbstractHtmlTagHandler;
 import poi.handler.param.DocumentParam;
 
+import java.util.Enumeration;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.regex.Pattern;
 
 /**
  * @Description: html标签处理类持有类
@@ -52,30 +57,44 @@ public class HtmlToWordUtils {
         documentParam.setCurrentParagraph(doc.createParagraph());
 //        documentParam.createRun();
         // 获取处理类
-        AbstractHtmlTagHandler abstractHtmlTagHandler = handlerMap.get(body.tagName());
-        abstractHtmlTagHandler.handler(documentParam);
+        parseTagByName(documentParam);
+//        AbstractHtmlTagHandler abstractHtmlTagHandler = handlerMap.get(body.tagName());
+//        abstractHtmlTagHandler.handler(documentParam);
         return doc;
     }
 
 
-    public static void parseTagByName(DocumentParam documentParam, Node node) {
-        if(documentParam.getContinueItr()){
-            log.info("跳过子节点迭代");
-            return;
-        }
-//        DocumentParam broParam = new DocumentParam();
-//        broParam.setDoc(documentParam.getDoc())
-//                .setCurrentParagraph(documentParam.getCurrentParagraph())
-//                .setStyle(documentParam.getStyle())
-//                .setCurrentRun(documentParam.getCurrentRun())
-//                .setCurrentNode(node);
-        documentParam.setCurrentNode(node);
-        AbstractHtmlTagHandler abstractHtmlTagHandler = HtmlToWordUtils.handlerMap.get("");
+    public static void parseTagByName(DocumentParam documentParam) {
+        Node node = documentParam.getCurrentNode();
+        AbstractHtmlTagHandler abstractHtmlTagHandler = handlerMap.get("");
         if(node instanceof Element){
-            abstractHtmlTagHandler = HtmlToWordUtils.handlerMap.get(((Element) node).tagName());
+            abstractHtmlTagHandler = getMatchTagHandler(((Element) node).tagName());
+            if(Objects.nonNull(abstractHtmlTagHandler)){
+                abstractHtmlTagHandler.handler(documentParam);
+            }
             log.info("tagName:{}",((Element) node).tagName());
+        }else if(node instanceof TextNode){
+            abstractHtmlTagHandler.handler(documentParam);
         }
-        abstractHtmlTagHandler.handler(documentParam);
+
+        if(node.childNodes().size() > 0){
+            node.childNodes().forEach(childNode->{
+                documentParam.setCurrentNode(childNode);
+                parseTagByName(documentParam);
+            });
+        }
+    }
+
+    private static AbstractHtmlTagHandler getMatchTagHandler(String tagName) {
+        Enumeration<String> keys = handlerMap.keys();
+        String key;
+        while (keys.hasMoreElements()) {
+            key = keys.nextElement();
+            if (tagName.equalsIgnoreCase(key) || tagName.matches(key)) {
+                return handlerMap.get(key);
+            }
+        }
+        return null;
     }
 
 }

@@ -1,13 +1,13 @@
 package poi.handler.utils;
 
 import cn.hutool.core.lang.Assert;
-import com.deepoove.poi.data.style.Style;
+import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
 import org.jsoup.nodes.Element;
 import poi.handler.common.PoiCommon;
+import poi.handler.param.TextFormatStyle;
 
 import java.awt.*;
 import java.util.function.Function;
-import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -19,25 +19,43 @@ import java.util.regex.Pattern;
 public class JsoupUtils {
 
 
-    public static Style parseStyle(String attributeStyle){
+    public static TextFormatStyle parseStyle(String attributeStyle){
         String[] splits = attributeStyle.split(PoiCommon.SEMICOLON);
-        Style style = new Style();
+
+        TextFormatStyle textFormatStyle = new TextFormatStyle();
+
         for (String split : splits) {
             if(split.contains(PoiCommon.FONT_SIZE)){
-                style.setFontSize(Integer.parseInt(
+                textFormatStyle.getStyle().setFontSize(Integer.parseInt(
                         split.substring(split.indexOf(PoiCommon.COLON) + 2)
                                 .replace("px", "")));
             }
 
             if(split.contains(PoiCommon.FONT_FAMILY)){
-                style.setFontFamily(split.substring(split.indexOf(PoiCommon.COLON) + 2));
+                textFormatStyle.getStyle().setFontFamily(split.substring(split.indexOf(PoiCommon.COLON) + 2));
             }
 
             if(split.contains(PoiCommon.FONT_COLOR)){
-                style.setColor(rgbToHex(split));
+                textFormatStyle.getStyle().setColor(rgbToHex(split));
             }
+
+            if(split.contains(PoiCommon.TXET_ALIGN)){
+                textFormatStyle.setParagraphAlignment(getParagraphAlignment(split));
+            }
+
         }
-        return style;
+        return textFormatStyle;
+    }
+
+    private static ParagraphAlignment getParagraphAlignment(String split) {
+        switch (split.substring(split.indexOf(PoiCommon.COLON))) {
+            case "center":
+                return ParagraphAlignment.CENTER;
+            case "right":
+                return ParagraphAlignment.RIGHT;
+            default:
+                return ParagraphAlignment.LEFT;
+        }
     }
 
     public static  <T> T getAttribute(Element element, String attrKey, Function<String, T> convertTypeFn, T defaultValue) {

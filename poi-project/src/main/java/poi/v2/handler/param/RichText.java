@@ -1,18 +1,18 @@
-package poi.handler.param;
+package poi.v2.handler.param;
 
-import com.deepoove.poi.data.style.Style;
 import lombok.Data;
-import lombok.experimental.Accessors;
-import org.apache.poi.ss.formula.functions.T;
 import org.apache.poi.xwpf.usermodel.*;
 import org.apache.xmlbeans.XmlCursor;
 import org.jsoup.nodes.Node;
+import poi.handler.param.TextFormatStyle;
 
-import java.util.Objects;
-
+/**
+ * @Description: 富文本解析参数
+ * @Author 01415355
+ * @Date 2023/4/18 10:46
+ */
 @Data
-@Accessors(chain = true)
-public class DocumentParam {
+public class RichText {
     /**
      * 当前的html元素
      */
@@ -33,33 +33,32 @@ public class DocumentParam {
     /**
      * 是否跳过迭代子节点
      */
-//    private Boolean continueItr = false;
+    private Boolean continueItr = false;
     /**
      * 其他可能需要的业务参数
      */
     private Object extendParams;
 
     /**
-     *  字体类型
+     * 字体类型
      */
 //    private Style style;
 
-    private TextFormatStyle textFormatStyle = new TextFormatStyle();
+    private TextFormatStyle textFormatStyle;
 
-//    private TextFormatStyle parentStyle;
     /**
      * 段落第一个标签不用换行
      */
     private boolean enableBreak = true;
 
 
-    public XWPFRun createRun(){
+    public XWPFRun createRun() {
         this.currentRun = this.getCurrentParagraph().createRun();
         this.enableBreak = true;
         return this.currentRun;
     }
 
-    public XWPFParagraph insertNewParagraph(IBodyElement bodyElement){
+    public XWPFParagraph insertNewParagraph(IBodyElement bodyElement) {
         if (bodyElement == null) {
             bodyElement = this.currentParagraph;
         }
@@ -83,11 +82,11 @@ public class DocumentParam {
         return this.currentParagraph;
     }
 
-    public XWPFParagraph insertNewParagraph(){
+    public XWPFParagraph insertNewParagraph() {
         return insertNewParagraph(null);
     }
 
-    public void removeParagraph(XWPFParagraph paragraph){
+    public void removeParagraph(XWPFParagraph paragraph) {
         if (paragraph == null) {
             paragraph = this.currentParagraph;
         }
@@ -95,45 +94,25 @@ public class DocumentParam {
         doc.removeBodyElement(posOfParagraph);
     }
 
-    public void removeParagraph(){
+    public void removeParagraph() {
         removeParagraph(null);
     }
 
 
-    public void resetStyle(){
-        textFormatStyle = null;
-    }
-
-    public boolean hasStyle() {
-        return hasTextFormat() && Objects.nonNull(textFormatStyle.getStyle());
-    }
-
-    public boolean hasParagraphAlignment() {
-        return hasTextFormat() && Objects.nonNull(textFormatStyle.getParagraphAlignment());
-    }
-
-    public boolean hasTextFormat() {
-        return Objects.nonNull(textFormatStyle);
-    }
-
-//
-//
-//    public boolean hasParentStyle(){
-//        return hasParentTextFormat() && Objects.nonNull(parentStyle.getStyle());
+//    public void resetStyle() {
+//        textFormatStyle = null;
 //    }
 //
-//    public boolean hasParentParagraphAlignment(){
-//        return hasParentTextFormat() && Objects.nonNull(parentStyle.getParagraphAlignment());
+//    public boolean hasStyle() {
+//        return hasTextFormat() && Objects.nonNull(textFormatStyle.getStyle());
 //    }
 //
-//    public boolean hasParentTextFormat(){
-//        return Objects.nonNull(parentStyle);
+//    public boolean hasParagraphAlignment() {
+//        return hasTextFormat() && Objects.nonNull(textFormatStyle.getParagraphAlignment());
 //    }
 //
-//
-//    public void swapParentStyle(){
-//        this.parentStyle = style;
-//        resetStyle();
+//    public boolean hasTextFormat() {
+//        return Objects.nonNull(textFormatStyle);
 //    }
 
 }

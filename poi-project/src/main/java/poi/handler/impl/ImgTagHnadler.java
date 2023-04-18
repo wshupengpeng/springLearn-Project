@@ -26,7 +26,8 @@ public class ImgTagHnadler extends AbstractHtmlTagHandler {
     }
 
     @Override
-    public void handler(DocumentParam documentParam) {
+    public void doHandler(DocumentParam documentParam) {
+        onPreHandler(documentParam);
         Node currentNode = documentParam.getCurrentNode();
         String imgRealPath = getImageRealPath(currentNode);
         try {
@@ -35,6 +36,8 @@ public class ImgTagHnadler extends AbstractHtmlTagHandler {
             e.printStackTrace();
         } catch (InvalidFormatException e) {
             e.printStackTrace();
+        }finally {
+            FileUtil.del(imgRealPath);
         }
     }
 

@@ -17,6 +17,8 @@ public class PoiCommon {
 
     public static final String FONT_COLOR = "color";
 
+    public static final String TXET_ALIGN = "text-align";
+
     public static final String COLON = ":";
 
     public static final String SEMICOLON = ";";

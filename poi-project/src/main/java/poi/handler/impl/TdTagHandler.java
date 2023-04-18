@@ -24,8 +24,8 @@ public class TdTagHandler extends AbstractHtmlTagHandler {
     }
 
     @Override
-    public void handler(DocumentParam documentParam) {
-        Node currentNode = documentParam.getCurrentNode();
-        currentNode.childNodes().stream().forEach(childNode-> HtmlToWordUtils.parseTagByName(documentParam,childNode));
+    public void doHandler(DocumentParam documentParam) {
+//        Node currentNode = documentParam.getCurrentNode();
+//        currentNode.childNodes().stream().forEach(childNode-> HtmlToWordUtils.parseTagByName(documentParam,childNode));
     }
 }

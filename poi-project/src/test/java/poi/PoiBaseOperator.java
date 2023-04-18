@@ -16,11 +16,11 @@ import org.jsoup.select.Elements;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTTblLayoutType;
-import org.openxmlformats.schemas.wordprocessingml.x2006.main.STMerge;
-import org.openxmlformats.schemas.wordprocessingml.x2006.main.STTblLayoutType;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.*;
 import poi.handler.common.PoiCommon;
 import poi.handler.impl.TableTagHandler;
+import poi.handler.param.TextFormatStyle;
+import poi.handler.resolver.StyleArgumentResolver;
 import poi.handler.utils.HtmlToWordUtils;
 import poi.handler.utils.JsoupUtils;
 import sun.security.krb5.internal.PAData;
@@ -44,7 +44,7 @@ public class PoiBaseOperator {
 
     public static final String descPath = "d://hpp//test.doc";
 
-    public static final String srcPath = "d://hpp//2.html";
+    public static final String srcPath = "d://hpp//3.html";
 
     public static final String srcPath_home = "d://测试数据/poi.html";
 
@@ -56,6 +56,7 @@ public class PoiBaseOperator {
         File file = new File(descPath);
 //        File file = new File(descPath_home);
         file.deleteOnExit();
+        new StyleArgumentResolver();
     }
 
 
@@ -66,10 +67,15 @@ public class PoiBaseOperator {
     }
 
     @Test
-    public void writerDoc(){
+    public void writerDoc() throws Exception {
         XWPFParagraph paragraph = doc.createParagraph();
-        XWPFTable table = doc.createTable();
-        paragraph.createRun().setText("test");
+        paragraph.createRun().setText("第一个段落,第一个runs");
+        paragraph.createRun().setText("第一个段落,第二个runs");
+        XWPFParagraph paragraph1 = doc.createParagraph();
+        paragraph1.createRun().setText("第二个段落");
+        doc.write(new FileOutputStream(descPath));
+//        XWPFTable table = doc.createTable();
+//        paragraph.createRun().setText("test");
 //        doc.insertTable(1,table);
     }
 
@@ -298,15 +304,15 @@ public class PoiBaseOperator {
 
             Elements strong = body.getElementsByTag("strong");
 
-            Style style = JsoupUtils.parseStyle(styleAttr);
+            TextFormatStyle style = JsoupUtils.parseStyle(styleAttr);
             XWPFRun run = xwpfParagraph.createRun();
 
             TextRenderPolicy.Helper.renderTextRun(run,
                 new TextRenderData(strong.text(),
-                        Optional.ofNullable(style).orElse(PoiCommon.DEFAULT_STYLE)));
+                        Optional.ofNullable(style.getStyle()).orElse(PoiCommon.DEFAULT_STYLE)));
             assert run != null;
 //            run.setBold(style.isBold());
-            run.setColor(style.getColor().replaceAll("#",""));
+            run.setColor(style.getStyle().getColor().replaceAll("#",""));
             run.setText(strong.text());
 //            run.setUnderline(style.isUnderLine());
 //        }
@@ -373,5 +379,36 @@ public class PoiBaseOperator {
 //            // 通过获取实际列数和行数，通过mergeFlag进行合并操作
 //        }
     }
+
+
+    @Test
+    public void backgroudColor() {
+        XWPFDocument document = new XWPFDocument();
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream(new File("d:\\test.docx"));
+            //段落
+            XWPFParagraph paragraph = document.createParagraph();
+            //具有相同属性的一个区域。
+            XWPFRun run = paragraph.createRun();
+            run.setBold(true); //加粗
+            run.setText("测试");
+            run.setColor("FF0000");
+            run = paragraph.createRun();
+            run.setText("背景色");
+            run.getCTR().addNewRPr().addNewHighlight().setVal(STHighlightColor.YELLOW);
+            run = paragraph.createRun();
+            CTShd shd = run.getCTR().addNewRPr().addNewShd();
+            shd.setFill("FFFF00");
+            run.setText("底纹");
+            document.write(fos);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
 
 }

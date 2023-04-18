@@ -1,5 +1,6 @@
 package poi.handler.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.deepoove.poi.data.TextRenderData;
 import com.deepoove.poi.policy.TextRenderPolicy;
 import lombok.extern.slf4j.Slf4j;
@@ -10,6 +11,7 @@ import poi.handler.common.PoiCommon;
 import poi.handler.param.DocumentParam;
 import poi.handler.utils.HtmlToWordUtils;
 
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -31,13 +33,23 @@ public class CommonHandler extends AbstractHtmlTagHandler {
     }
 
     @Override
-    public void handler(DocumentParam documentParam) {
+    public void doHandler(DocumentParam documentParam) {
         // 处理当前文本数据
         Node currentNode = documentParam.getCurrentNode();
+
+        if(documentParam.hasParagraphAlignment()){
+            documentParam.getCurrentParagraph().setAlignment(documentParam.getTextFormatStyle().getParagraphAlignment());
+        }
         if(currentNode instanceof TextNode){
             TextRenderPolicy.Helper.renderTextRun(documentParam.createRun(),
-                    new TextRenderData(((TextNode) currentNode).text(),
-                            Optional.ofNullable(documentParam.getStyle()).orElse(PoiCommon.DEFAULT_STYLE)));
+                    new TextRenderData(((TextNode) currentNode).text(), documentParam.getTextFormatStyle().getStyle()));
+            log.info("text:{},style:{}", ((TextNode) currentNode).text(),JSONObject.toJSONString(documentParam.getTextFormatStyle().getStyle()));
         }
+
+//        if(currentNode instanceof TextNode){
+//            TextRenderPolicy.Helper.renderTextRun(documentParam.createRun(),
+//                    new TextRenderData(((TextNode) currentNode).text(),
+//                            Optional.ofNullable(documentParam.getStyle().getStyle()).orElse(PoiCommon.DEFAULT_STYLE)));
+//        }
     }
 }

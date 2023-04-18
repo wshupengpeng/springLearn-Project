@@ -32,7 +32,7 @@ public class UserController {
         user.setUserName(name);
         iUserService.update(user);
         iUserService.save(user);
-        int i = 1/0;
+//        int i = 1/0;
         System.out.println(user);
     }
 

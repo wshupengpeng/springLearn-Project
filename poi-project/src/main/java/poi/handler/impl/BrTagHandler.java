@@ -4,6 +4,8 @@ import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import poi.handler.AbstractHtmlTagHandler;
 import poi.handler.param.DocumentParam;
 
+import java.util.Objects;
+
 /**
  * @Description
  * @Author 01415355
@@ -16,8 +18,11 @@ public class BrTagHandler extends AbstractHtmlTagHandler {
     }
 
     @Override
-    public void handler(DocumentParam documentParam) {
-        XWPFParagraph currentParagraph = documentParam.getCurrentParagraph();
+    public void doHandler(DocumentParam documentParam) {
+        if(Objects.isNull(documentParam.getCurrentRun())){
+//            XWPFParagraph currentParagraph = documentParam.getCurrentParagraph();
+            documentParam.createRun();
+        }
         documentParam.getCurrentRun().getCTR().addNewBr();
     }
 }

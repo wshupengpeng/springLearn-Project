@@ -27,19 +27,23 @@ public class EmTagHandler extends AbstractHtmlTagHandler {
     }
 
     @Override
-    public void handler(DocumentParam documentParam) {
-        Style style = documentParam.getStyle();
-        if(Objects.isNull(style)){
-            style = new Style();
-        }
-        style.setItalic(true);
-        Node currentNode = documentParam.getCurrentNode();
-        if(currentNode instanceof TextNode){
-            TextRenderPolicy.Helper.renderTextRun(documentParam.createRun(),
-                    new TextRenderData(((TextNode) currentNode).text(),
-                            Optional.ofNullable(documentParam.getStyle()).orElse(PoiCommon.DEFAULT_STYLE)));
-        }else{
-            currentNode.childNodes().forEach(childNode -> HtmlToWordUtils.parseTagByName(documentParam, childNode));
-        }
+    public void doHandler(DocumentParam documentParam) {
+        documentParam.getTextFormatStyle().getStyle().setItalic(true);
+//        Style style = documentParam.getStyle().getStyle();
+//        if(Objects.isNull(style)){
+//            style = new Style();
+//        }
+//        style.setItalic(true);
+//        Node currentNode = documentParam.getCurrentNode();
+//        if(currentNode instanceof TextNode){
+//
+//            documentParam.getCurrentParagraph().setAlignment(documentParam.getStyle().getParagraphAlignment());
+//
+//            TextRenderPolicy.Helper.renderTextRun(documentParam.createRun(),
+//                    new TextRenderData(((TextNode) currentNode).text(),
+//                            Optional.ofNullable(documentParam.getStyle().getStyle()).orElse(PoiCommon.DEFAULT_STYLE)));
+//        }else{
+//            currentNode.childNodes().forEach(childNode -> HtmlToWordUtils.parseTagByName(documentParam, childNode));
+//        }
     }
 }

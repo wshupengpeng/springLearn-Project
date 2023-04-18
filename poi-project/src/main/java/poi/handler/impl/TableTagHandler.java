@@ -44,7 +44,7 @@ public class TableTagHandler extends AbstractHtmlTagHandler {
     }
 
     @Override
-    public void handler(DocumentParam documentParam) {
+    public void doHandler(DocumentParam documentParam) {
         Node currentNode = documentParam.getCurrentNode();
         Element tableEle = (Element) currentNode;
 
@@ -94,13 +94,13 @@ public class TableTagHandler extends AbstractHtmlTagHandler {
             }
         }
 
-        for (int i = 0; i < table.getRows().size(); i++) {
-            for(int j = 0; j < table.getRow(i).getTableCells().size(); j++){
-                log.info("i:{},j:{},HmergeValue:{},VmergeValue:{}", i, j,
-                        table.getRow(i).getCell(j).getCTTc().getTcPr().getHMerge().getVal().toString(),
-                        table.getRow(i).getCell(j).getCTTc().getTcPr().getVMerge().getVal());
-            }
-        }
+//        for (int i = 0; i < table.getRows().size(); i++) {
+//            for(int j = 0; j < table.getRow(i).getTableCells().size(); j++){
+//                log.info("i:{},j:{},HmergeValue:{},VmergeValue:{}", i, j,
+//                        table.getRow(i).getCell(j).getCTTc().getTcPr().getHMerge().getVal().toString(),
+//                        table.getRow(i).getCell(j).getCTTc().getTcPr().getVMerge().getVal());
+//            }
+//        }
 
         // 方式一,按照rowspan和colspan的值进行手动创建cell单元格
 //        int colOffset = 0;
@@ -269,13 +269,14 @@ public class TableTagHandler extends AbstractHtmlTagHandler {
 
                 XWPFTableCell cell = xwpfTableRow.getCell(placeholderIndex == 0 ? j + colOffset : placeholderIndex);
 //                XWPFTableCell cell = table.getRow(i).getTableCells().get(table.getRow(i).getTableCells().size() - 1);
-                log.info("i:{},col:{},value:{}", i, placeholderIndex == 0 ? j + colOffset : placeholderIndex,element.text());
+//                log.info("i:{},col:{},value:{}", i, placeholderIndex == 0 ? j + colOffset : placeholderIndex,element.text());
                 XWPFParagraph xwpfParagraph = cell.addParagraph();
                 DocumentParam tableDocumentParam = new DocumentParam();
-                tableDocumentParam.setStyle(documentParam.getStyle());
+                tableDocumentParam.setTextFormatStyle(documentParam.getTextFormatStyle());
                 tableDocumentParam.setCurrentParagraph(xwpfParagraph);
                 tableDocumentParam.setDoc(documentParam.getDoc());
-                HtmlToWordUtils.parseTagByName(tableDocumentParam, element);
+                tableDocumentParam.setCurrentNode(element);
+                HtmlToWordUtils.parseTagByName(tableDocumentParam);
 
                 colOffset += (colSpan - 1 + placeholderIndex);
             }
