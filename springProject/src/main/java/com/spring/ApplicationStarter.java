@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.util.StopWatch;
 
 import javax.annotation.PostConstruct;
@@ -14,6 +15,7 @@ import javax.annotation.PostConstruct;
 @SpringBootApplication
 @MapperScan("com.spring.**")
 @EnableConfigurationProperties
+@ServletComponentScan("com.spring")
 public class ApplicationStarter {
     @Autowired
     private AutoProperties autoProperties;

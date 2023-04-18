@@ -5,11 +5,11 @@ spring:
       username: root
       password: root
       driver-class-name: com.mysql.cj.jdbc.Driver
-logging:
-  level:
-    org:
-      springframework: debug
-      apache: debug
+#logging:
+#  level:
+#    org:
+#      springframework: debug
+#      apache: debug
 mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
