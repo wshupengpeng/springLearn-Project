@@ -47,14 +47,14 @@ public class RichText {
     private TextFormatStyle textFormatStyle;
 
     /**
-     * 段落第一个标签不用换行
+     *  是否需要换行
      */
-    private boolean enableBreak = true;
+    private boolean needBreak = false;
 
 
     public XWPFRun createRun() {
         this.currentRun = this.getCurrentParagraph().createRun();
-        this.enableBreak = true;
+//        this.needBreak = true;
         return this.currentRun;
     }
 
@@ -78,7 +78,7 @@ public class RichText {
         }
 
         this.createRun();
-        this.enableBreak = false;
+//        this.needBreak = false;
         return this.currentParagraph;
     }
 

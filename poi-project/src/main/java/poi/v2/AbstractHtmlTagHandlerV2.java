@@ -18,6 +18,8 @@ import poi.v2.handler.param.RichText;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.function.Function;
 
 /**
  * @Description:
@@ -67,61 +69,76 @@ public abstract class AbstractHtmlTagHandlerV2 {
         postHandler(richText);
     }
 
-    private void postHandler(RichText richText){
+    private void preHandler(RichText richText){
         Node currentNode = richText.getCurrentNode();
+        TextFormatStyle textFormatStyle = ifNullSetParentOrDefaultTextStyle(richText.getTextFormatStyle(), new TextFormatStyle());
+
         // 判断当前标签是否含有style属性
         if(currentNode.hasAttr(PoiCommon.STYLE_ATTRIBUTE_KEY)){
             // 如果有的话,则读取当前style属性,解析其内容
-            TextFormatStyle textFormatStyle = JsoupUtils.parseStyle(currentNode.attr(PoiCommon.STYLE_ATTRIBUTE_KEY));
             //todo 目前想到的参数就这些，如果后面参数比较多，可以定义参数解析器接口,通过实现接口完成不同参数的解析规则和内容，具体看后面的参数情况
-
-            //判断是否含有字体参数
-            if (!textFormatStyle.hasStyle()) {
-                // 如果不含有字体字段,则取父标签的字体字段
-                if (Objects.nonNull(richText.getTextFormatStyle())
-                        && richText.getTextFormatStyle().hasStyle()) {
-                    textFormatStyle.setStyle(richText.getTextFormatStyle().getStyle());
-                } else {
-                    // 如果父标签也没有字体字段,则取系统默认字段和大小
-                    textFormatStyle.setStyle(PoiCommon.DEFAULT_STYLE);
-                }
-            }
-
-            // 判断是否含有段落字段
-            if(!textFormatStyle.hasParagraphAlignment()){
-                if (Objects.nonNull(richText.getTextFormatStyle())
-                        && richText.getTextFormatStyle().hasParagraphAlignment()) {
-                    textFormatStyle.setParagraphAlignment(richText.getTextFormatStyle().getParagraphAlignment());
-                }else{
-                    textFormatStyle.setStyle(ParagraphAlignment.CENTER);
-                }
-            }
-
-            richText.setTextFormatStyle(textFormatStyle);
+            textFormatStyle = JsoupUtils.parseStyle(currentNode.attr(PoiCommon.STYLE_ATTRIBUTE_KEY));
+            ifNullSetParentOrDefaultTextStyle(richText.getTextFormatStyle(), textFormatStyle);
         }
+        richText.setTextFormatStyle(textFormatStyle);
     }
 
-    private void preHandler(RichText richText){
+    private TextFormatStyle ifNullSetParentOrDefaultTextStyle(TextFormatStyle parentTextFormatStyle, TextFormatStyle textFormatStyle) {
+        //判断是否含有字体参数
+        if (!textFormatStyle.hasStyle()) {
+            // 如果不含有字体字段,则取父标签的字体字段
+            if (Objects.nonNull(parentTextFormatStyle)
+                    && parentTextFormatStyle.hasStyle()) {
+                textFormatStyle.setStyle(parentTextFormatStyle.getStyle());
+            } else {
+                // 如果父标签也没有字体字段,则取系统默认字段和大小
+                textFormatStyle.setStyle(PoiCommon.DEFAULT_STYLE);
+            }
+        }
+
+        // 判断是否含有段落字段
+        if(!textFormatStyle.hasParagraphAlignment()){
+            if (Objects.nonNull(parentTextFormatStyle)
+                    && parentTextFormatStyle.hasParagraphAlignment()) {
+                textFormatStyle.setParagraphAlignment(parentTextFormatStyle.getParagraphAlignment());
+            }
+        }
+        return textFormatStyle;
+    }
+
+    private void postHandler(RichText richText){
         Node currentNode = richText.getCurrentNode();
-        if(currentNode instanceof Element){
+        if(currentNode instanceof Element && !richText.getContinueItr()){
             // 如果是Element代表还有子元素
             currentNode.childNodes().stream().forEach(childNode->{
                 RichText childRichText = new RichText();
                 BeanUtil.copyProperties(richText, childRichText);
 
+                childRichText.setCurrentNode(childNode);
+
                 if(childNode instanceof Element){
-                    AbstractHtmlTagHandlerV2 handler = RichTextParser.getHandler(((Element) childNode).tagName());
-
-                    if(Objects.isNull(handler)){
-                        log.info("未定义标签:{}处理类,请定义后进行处理", ((Element) childNode).tagName());
-                        return;
-                    }
-
-                    handler.handler(childRichText);
+                    parseTag(((Element) childNode).tagName(), childRichText);
+                }else if(childNode instanceof TextNode){
+                    parseTag("", childRichText);
                 }
 
             });
         }
+//
+//        if(richText.isNeedBreak()){
+//            richText.getCurrentRun().addBreak();
+//        }
+    }
+
+    protected void parseTag(String tagName, RichText richText) {
+        AbstractHtmlTagHandlerV2 handler = RichTextParser.getHandler(tagName);
+
+        if(Objects.isNull(handler)){
+            log.info("未定义标签:{}处理类,请定义后进行处理", tagName);
+            return;
+        }
+
+        handler.handler(richText);
     }
 
 }

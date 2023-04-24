@@ -25,6 +25,14 @@ public class TextFormatStyle {
      */
     private ParagraphAlignment paragraphAlignment;
 
+    public TextFormatStyle() {
+    }
+
+    public TextFormatStyle(Style style, ParagraphAlignment paragraphAlignment) {
+        this.style = style;
+        this.paragraphAlignment = paragraphAlignment;
+    }
+
     public boolean hasStyle(){
         return Objects.nonNull(style);
     }

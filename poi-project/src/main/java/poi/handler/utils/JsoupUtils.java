@@ -36,11 +36,15 @@ public class JsoupUtils {
             }
 
             if(split.contains(PoiCommon.FONT_COLOR)){
-                textFormatStyle.getStyle().setColor(rgbToHex(split));
+                textFormatStyle.getStyle().setColor(split.substring(split.indexOf(PoiCommon.COLON) + 2));
             }
 
             if(split.contains(PoiCommon.TXET_ALIGN)){
-                textFormatStyle.setParagraphAlignment(getParagraphAlignment(split));
+                textFormatStyle.setParagraphAlignment(getParagraphAlignment(split.substring(split.indexOf(PoiCommon.COLON) + 2)));
+            }
+
+            if(split.contains(PoiCommon.TXET_ALIGN) && split.contains("underline")){
+                textFormatStyle.getStyle().setUnderLine(true);
             }
 
         }
@@ -67,13 +71,13 @@ public class JsoupUtils {
     }
 
     public static void main(String[] args) {
-        String input = "rgb(231, 95, 51)";
+        String input = "#e03e2d";
 //        boolean matches = Pattern.matches("\\([0-9]+\\)", input);
 //        System.out.println(matches);
 //        boolean matches = regex.matches("(^[0-9]+[,)])");
 //        System.out.println(matches);
         String s = rgbToHex(input);
-        System.out.println(Color.decode(s));
+        System.out.println(Color.decode(input));
 //        Color color = new Color(231,95,51);
 //        String format = String.format("#%02X%02X%02X", 231, 95, 51);
 //        System.out.println(format);
