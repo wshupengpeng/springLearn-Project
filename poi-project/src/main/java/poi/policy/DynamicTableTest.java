@@ -7,12 +7,11 @@ import com.deepoove.poi.data.RenderData;
 import com.deepoove.poi.data.RowRenderData;
 import com.deepoove.poi.data.TextRenderData;
 import org.junit.Test;
+import poi.handler.param.CellMergeRecord;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @Description
@@ -26,17 +25,33 @@ public class DynamicTableTest {
         String resource = "src/main/resources/水质模板.docx";
         DetailTable datas = new DetailTable();
 
-        datas.initData();
+        datas.initData(5,5);
+        datas.initTitle(5);
+
+        List<CellMergeRecord> mergeRecordList = new ArrayList<>();
+
+        for(int i = 0; i < 4; i++){
+            if (i % 2 == 0){
+                CellMergeRecord record = new CellMergeRecord();
+                record.setRowStartIndex(i);
+                record.setRowEndIndex(i+1);
+                record.setColEndIndex(i+1);
+                record.setColStartIndex(i);
+                mergeRecordList.add(record);
+            }
+        }
+
+        datas.setMergeRecords(mergeRecordList);
 
         Configure config = Configure.newBuilder()
-//                .bind("dynamicTable", new DetailTablePolicy())
+                .bind("dynamicTable", new DetailTablePolicy())
                 .build();
-        Map<String, RenderData> render = new HashMap<>();
-        MiniTableRenderData renderData = new MiniTableRenderData(RowRenderData
-                .build(new String[]{"标题头一", "标题头二"}), Arrays.asList(RowRenderData.build("1", "2")));
-        render.put("dynamicTable", renderData);
-//        Map<String,Object> render = new HashMap<>();
-//        render.put("dynamicTable",datas);
+//        Map<String, RenderData> render = new HashMap<>();
+//        MiniTableRenderData renderData = new MiniTableRenderData(RowRenderData
+//                .build(new String[]{"标题头一", "标题头二"}), Arrays.asList(RowRenderData.build("1", "2")));
+//        render.put("dynamicTable", renderData);
+        Map<String,Object> render = new HashMap<>();
+        render.put("dynamicTable",datas);
         XWPFTemplate template = XWPFTemplate.compile(resource, config).render(render);
         FileOutputStream out = new FileOutputStream("out_水质报告测试.docx");
         template.write(out);

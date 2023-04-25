@@ -1,7 +1,7 @@
 package poi.policy;
 
-import com.deepoove.poi.data.RowRenderData;
 import lombok.Data;
+import poi.handler.param.CellMergeRecord;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,31 +14,34 @@ import java.util.List;
 @Data
 public class DetailTable {
 
-    List<List<String>> data = new ArrayList<>();
+    List<List<String>> data;
+
+    List<List<String>> head;
+
+    List<CellMergeRecord> mergeRecords;
 
     boolean isSupportCustomizePolicy = true;
 
 
-    public void initData(){
-        int dataSize = 10;
-        int titleSize = 2;
-        initTitle(titleSize);
-        int preNum = 1;
-        for(int i = 1; i < dataSize; i++){
-            List<String> row = new ArrayList<>();
-            for(int j = 0; j < titleSize; j++){
-                row.add((preNum + i)/2 + "");
+    public void initData(int row,int col){
+        data = new ArrayList<>();
+        for(int i = 0; i < row; i++){
+            List<String> rowList = new ArrayList<>();
+            for(int j = 0; j < col; j++){
+                rowList.add("表格数据"+i);
             }
+            data.add(rowList);
         }
     }
 
 
     public void initTitle(int titleSize){
-        List<String> title = new ArrayList<>();
+        head =  new ArrayList<>();
         for (int i = 0; i < titleSize; i++) {
-            title.add("标题" + i);
+            List<String> colList = new ArrayList<>();
+            colList.add("标题" + i);
+            head.add(colList);
         }
-        data.add(title);
     }
 
 
