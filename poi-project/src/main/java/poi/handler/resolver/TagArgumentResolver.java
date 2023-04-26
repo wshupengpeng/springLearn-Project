@@ -9,9 +9,9 @@ import poi.handler.param.DocumentParam;
  * @Author 01415355
  * @Date 2023/4/12 10:52
  */
-public abstract class HandlerArgumentResolver {
+public abstract class TagArgumentResolver {
 
-    public HandlerArgumentResolver() {
+    public TagArgumentResolver() {
         AbstractHtmlTagHandler.resolverList.add(this);
     }
 

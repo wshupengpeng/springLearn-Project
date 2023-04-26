@@ -1,18 +1,10 @@
 package poi.handler;
 
-import com.deepoove.poi.util.StyleUtils;
-import org.jsoup.nodes.Node;
-import poi.handler.common.PoiCommon;
 import poi.handler.param.DocumentParam;
-import poi.handler.param.TextFormatStyle;
-import poi.handler.resolver.HandlerArgumentResolver;
-import poi.handler.utils.JsoupUtils;
-import poi.handler.utils.ObjectUtils;
+import poi.handler.resolver.TagArgumentResolver;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 
 /**
  * @Description:
@@ -29,7 +21,7 @@ import java.util.Optional;
  */
 public abstract class AbstractHtmlTagHandler {
 
-    public static List<HandlerArgumentResolver> resolverList = new ArrayList<>();
+    public static List<TagArgumentResolver> resolverList = new ArrayList<>();
 
     /**
      * 获取当前处理类可以处理的tag标签

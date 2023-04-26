@@ -1,6 +1,9 @@
 package poi;
 
+import com.deepoove.poi.XWPFTemplate;
+import com.deepoove.poi.config.Configure;
 import com.deepoove.poi.data.MiniTableRenderData;
+import com.deepoove.poi.data.PictureRenderData;
 import com.deepoove.poi.data.TextRenderData;
 import com.deepoove.poi.data.style.Style;
 import com.deepoove.poi.policy.TextRenderPolicy;
@@ -23,14 +26,13 @@ import poi.handler.param.TextFormatStyle;
 import poi.handler.resolver.StyleArgumentResolver;
 import poi.handler.utils.HtmlToWordUtils;
 import poi.handler.utils.JsoupUtils;
+import poi.v2.handler.RichTextParser;
 import sun.security.krb5.internal.PAData;
 
 import java.awt.*;
 import java.io.*;
-import java.util.Arrays;
-import java.util.Iterator;
+import java.util.*;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * @Description: poi基本操作学习
@@ -408,6 +410,27 @@ public class PoiBaseOperator {
             e.printStackTrace();
         }
 
+    }
+
+    /**
+     *  poi-tl测试图片嵌入
+     */
+    @Test
+    public void addImage() throws Exception {
+        String resource = "src/main/resources/水质模板.docx";
+//        Configure.newBuilder()
+        Map<String,Object> render = new HashMap<>();
+        render.put("picture",new PictureRenderData(100,100,"D:\\2.jpg"));
+        XWPFTemplate template = XWPFTemplate.compile(resource).render(render);
+        FileOutputStream out = new FileOutputStream("out_水质报告测试.docx");
+        template.write(out);
+    }
+
+
+    @Test
+    public void parseHtmlV2() throws Exception {
+        Document parse = Jsoup.parse(new File(srcPath));
+        RichTextParser.parse(parse.outerHtml(),"d://hpp//test1.doc");
     }
 
 

@@ -2,24 +2,16 @@ package poi.v2;
 
 import cn.hutool.core.bean.BeanUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 import org.jsoup.nodes.TextNode;
-import org.omg.CORBA.PUBLIC_MEMBER;
 import poi.handler.common.PoiCommon;
-import poi.handler.param.DocumentParam;
 import poi.handler.param.TextFormatStyle;
-import poi.handler.resolver.HandlerArgumentResolver;
 import poi.handler.utils.JsoupUtils;
 import poi.v2.handler.RichTextParser;
 import poi.v2.handler.param.RichText;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
-import java.util.function.Function;
 
 /**
  * @Description:
@@ -60,6 +52,7 @@ public abstract class AbstractHtmlTagHandlerV2 {
      */
     public void handler(RichText richText){
         // 用于处理标签的style属性,不需要每个标签都去读一下,抽取公共的方法
+        // 如果需要执行特殊方法,则由每个实现类自行实行
         preHandler(richText);
 
         // 当前方法由具体实现类自行实现，用于处理当前标签的特殊操作
@@ -110,24 +103,21 @@ public abstract class AbstractHtmlTagHandlerV2 {
         Node currentNode = richText.getCurrentNode();
         if(currentNode instanceof Element && !richText.getContinueItr()){
             // 如果是Element代表还有子元素
+            TextFormatStyle textFormatStyle = richText.getTextFormatStyle();
             currentNode.childNodes().stream().forEach(childNode->{
-                RichText childRichText = new RichText();
-                BeanUtil.copyProperties(richText, childRichText);
-
-                childRichText.setCurrentNode(childNode);
+//                RichText childRichText = new RichText();
+//                BeanUtil.copyProperties(richText, childRichText);
+                richText.setTextFormatStyle(textFormatStyle);
+                richText.setCurrentNode(childNode);
 
                 if(childNode instanceof Element){
-                    parseTag(((Element) childNode).tagName(), childRichText);
+                    parseTag(((Element) childNode).tagName(), richText);
                 }else if(childNode instanceof TextNode){
-                    parseTag("", childRichText);
+                    parseTag("", richText);
                 }
-
             });
         }
-//
-//        if(richText.isNeedBreak()){
-//            richText.getCurrentRun().addBreak();
-//        }
+        richText.setContinueItr(Boolean.FALSE);
     }
 
     protected void parseTag(String tagName, RichText richText) {

@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
  * @Author 01415355
  * @Date 2023/4/12 10:56
  */
-public class StyleArgumentResolver extends HandlerArgumentResolver {
+public class StyleArgumentResolver extends TagArgumentResolver {
 
 //    public StyleArgumentResolver() {
 //        AbstractHtmlTagHandler.resolverList.add(this);

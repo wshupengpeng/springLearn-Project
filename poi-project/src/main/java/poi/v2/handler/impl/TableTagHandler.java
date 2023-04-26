@@ -179,12 +179,13 @@ public class TableTagHandler extends AbstractHtmlTagHandlerV2 {
 
                 XWPFTableCell cell = xwpfTableRow.getCell(placeholderIndex == 0 ? j + colOffset : placeholderIndex);
                 XWPFParagraph xwpfParagraph = cell.addParagraph();
-                DocumentParam tableDocumentParam = new DocumentParam();
-                tableDocumentParam.setTextFormatStyle(richText.getTextFormatStyle());
-                tableDocumentParam.setCurrentParagraph(xwpfParagraph);
-                tableDocumentParam.setDoc(richText.getDoc());
-                tableDocumentParam.setCurrentNode(element);
-                HtmlToWordUtils.parseTagByName(tableDocumentParam);
+                RichText childRichText = new RichText();
+                childRichText.setTextFormatStyle(richText.getTextFormatStyle());
+                childRichText.setCurrentParagraph(xwpfParagraph);
+                childRichText.setDoc(richText.getDoc());
+                childRichText.setCurrentNode(element);
+//                HtmlToWordUtils.parseTagByName(tableDocumentParam);
+                parseTag(element.tagName(),childRichText);
 
                 colOffset += (colSpan - 1 + placeholderIndex);
             }
