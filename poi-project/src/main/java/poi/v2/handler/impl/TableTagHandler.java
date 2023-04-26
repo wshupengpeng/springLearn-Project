@@ -164,7 +164,7 @@ public class TableTagHandler extends AbstractHtmlTagHandlerV2 {
                             for (int col = 0; col < colSpan; col++) {
                                 // placeholderKey 是记录startRow 和 colStart 的位置
                                 placeholderKey = String.format("%s-%s", row, col + j + colOffset);
-                                placeholderIndex = ceateMergeCell(placeholderMap, i, xwpfTableRow, placeholderKey);
+                                placeholderIndex = ceateCell(placeholderMap, i, xwpfTableRow, placeholderKey);
                             }
                         }else{
                             // 记录下一行需要添加的单元格位置
@@ -173,7 +173,7 @@ public class TableTagHandler extends AbstractHtmlTagHandlerV2 {
                         }
                     }
                 } else {
-                    placeholderIndex = ceateMergeCell(placeholderMap, i, xwpfTableRow, placeholderKey);
+                    placeholderIndex = ceateCell(placeholderMap, i, xwpfTableRow, placeholderKey);
                 }
 
 
@@ -194,7 +194,7 @@ public class TableTagHandler extends AbstractHtmlTagHandlerV2 {
         return mergeRecordList;
     }
 
-    private int ceateMergeCell(Map<String, Integer> placeholderMap, int row, XWPFTableRow xwpfTableRow, String placeholderKey) {
+    private int ceateCell(Map<String, Integer> placeholderMap, int row, XWPFTableRow xwpfTableRow, String placeholderKey) {
         int colEndIndex = 0;
         while (placeholderMap.containsKey(placeholderKey)) {
             // 如果placeholderMap 有当前记录,则获取colEndIndex添加单元格
