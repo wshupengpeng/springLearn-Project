@@ -19,6 +19,7 @@ import org.jsoup.select.Elements;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.openxmlformats.schemas.drawingml.x2006.main.STSchemeColorVal;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.*;
 import poi.handler.common.PoiCommon;
 import poi.handler.impl.TableTagHandler;
@@ -388,7 +389,7 @@ public class PoiBaseOperator {
         XWPFDocument document = new XWPFDocument();
         FileOutputStream fos = null;
         try {
-            fos = new FileOutputStream(new File("d:\\test.docx"));
+            fos = new FileOutputStream(new File("d:\\hpp\\test.docx"));
             //段落
             XWPFParagraph paragraph = document.createParagraph();
             //具有相同属性的一个区域。
@@ -397,12 +398,22 @@ public class PoiBaseOperator {
             run.setText("测试");
             run.setColor("FF0000");
             run = paragraph.createRun();
-            run.setText("背景色");
-            run.getCTR().addNewRPr().addNewHighlight().setVal(STHighlightColor.YELLOW);
+//            run.setText("背景色");
+//            run.getCTR().addNewRPr().addNewHighlight().setVal(STHighlightColor.Enum.forString("FFFF00"));
+            TextRenderPolicy.Helper.renderTextRun(run,new TextRenderData("背景色",new Style()));
+            run.getCTR().addNewRPr().addNewShd().setFill("f1c40f");
             run = paragraph.createRun();
             CTShd shd = run.getCTR().addNewRPr().addNewShd();
             shd.setFill("FFFF00");
             run.setText("底纹");
+            run = paragraph.createRun();
+//            run.setText("下标测试");
+            run.setSubscript(VerticalAlign.SUBSCRIPT);
+            TextRenderPolicy.Helper.renderTextRun(run,new TextRenderData("下标测试",new Style()));
+            TextRenderPolicy.Helper.renderTextRun(run,new TextRenderData("下标测试1",new Style()));
+            run = paragraph.createRun();
+            run.setText("上标测试");
+            run.setSubscript(VerticalAlign.SUPERSCRIPT);
             document.write(fos);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -420,7 +431,9 @@ public class PoiBaseOperator {
         String resource = "src/main/resources/水质模板.docx";
 //        Configure.newBuilder()
         Map<String,Object> render = new HashMap<>();
-        render.put("picture",new PictureRenderData(100,100,"D:\\2.jpg"));
+//        render.put("picture",new PictureRenderData(100,100,"D:\\2.jpg"));
+        render.put("asdasddddddddddasdddddddasdasasssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss",new TextRenderData("测试文字占位符号",new Style()));
+        render.put("123",new TextRenderData("测试文字长文本占位符号",new Style()));
         XWPFTemplate template = XWPFTemplate.compile(resource).render(render);
         FileOutputStream out = new FileOutputStream("out_水质报告测试.docx");
         template.write(out);

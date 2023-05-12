@@ -1,6 +1,7 @@
 package poi.handler.utils;
 
 import cn.hutool.core.lang.Assert;
+import com.deepoove.poi.data.style.Style;
 import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
 import org.jsoup.nodes.Element;
 import poi.handler.common.PoiCommon;
@@ -77,13 +78,15 @@ public class JsoupUtils {
 //        boolean matches = regex.matches("(^[0-9]+[,)])");
 //        System.out.println(matches);
         String s = rgbToHex(input);
+        Style style = new Style();
+        style.setColor(input);
         System.out.println(Color.decode(input));
 //        Color color = new Color(231,95,51);
 //        String format = String.format("#%02X%02X%02X", 231, 95, 51);
 //        System.out.println(format);
 //
-//        Color decode = Color.decode(format);
-//        System.out.println(decode);
+        Color decode = Color.decode(input);
+        System.out.println(decode);
     }
 
     public static String rgbToHex(String colorAttribute){
