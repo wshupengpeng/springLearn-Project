@@ -42,6 +42,7 @@ public class PdfPosition {
         PdfReaderContentParser pdfReaderContentParser = new PdfReaderContentParser(pdfReader);
         CustomRenderListener customRenderListener = new CustomRenderListener();
         pdfReaderContentParser.processContent(numberOfPages,customRenderListener);
+        // 去除空白字符
         String resultantText = customRenderListener.getResultantText().replaceAll("\\s","");
         Map<Integer, TextRenderInfo> renderIndexMap = customRenderListener.getRenderIndexMap();
 
