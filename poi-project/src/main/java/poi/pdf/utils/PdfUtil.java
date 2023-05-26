@@ -27,7 +27,7 @@ public class PdfUtil {
      * @param searchWord 搜索词
      * @return
      */
-    public static List<CoordinateRecord> searchWordByPdfPath(String pdfPath, String searchWord) {
+    public static List<CoordinateRecord> getCoordinateBySearchWord(String pdfPath, String searchWord) {
         // float 分别记录三个字段
         List<CoordinateRecord> coordinateList = new ArrayList<>();
         try {

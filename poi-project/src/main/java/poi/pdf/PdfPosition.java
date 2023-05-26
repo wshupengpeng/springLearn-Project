@@ -25,7 +25,7 @@ public class PdfPosition {
 
         String filepath = "D:\\hpp\\工作文档\\代码测试文档\\Pdf 测试抓取坐标.pdf";
 
-        String searchWord = "helloworld";
+        String searchWord = "中国工商银行";
 
         String descPdf = "D:\\hpp\\工作文档\\代码测试文档\\Pdf 测试抓取坐标结果.pdf";
 
