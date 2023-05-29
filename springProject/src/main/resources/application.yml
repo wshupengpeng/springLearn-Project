@@ -15,3 +15,8 @@ mybatis-plus:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 prefix-app:
   name: hpp
+value:
+  dependency:
+    injection:
+      name: 张三
+      addr: 河南
