@@ -1,5 +1,6 @@
 package com.spring.environment.param;
 
+import com.alibaba.fastjson.JSONObject;
 import lombok.Data;
 import org.springframework.core.env.Environment;
 import org.springframework.util.PropertyPlaceholderHelper;
@@ -31,6 +32,11 @@ public class RefreshField {
      */
     String value;
 
+    public RefreshField(Object bean, Field field, String value) {
+        this.bean = bean;
+        this.field = field;
+        this.value = value;
+    }
 
     public void updateValue(Environment environment){
         boolean accessible = field.isAccessible();
@@ -38,7 +44,15 @@ public class RefreshField {
             field.setAccessible(Boolean.TRUE);
         }
         String updateVal = propertyPlaceholderHelper.replacePlaceholders(value, environment::getProperty);
+        try {
+            if(field.getType() == String.class){
+                field.set(bean, updateVal);
+            }else{
+                field.set(bean, JSONObject.parseObject(updateVal,field.getType()));
+            }
+        }catch (Exception e){
 
+        }
 
     }
 

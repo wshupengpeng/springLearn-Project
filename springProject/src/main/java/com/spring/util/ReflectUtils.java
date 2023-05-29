@@ -12,7 +12,7 @@ public class ReflectUtils {
 
 
     public static boolean hasAnnotation(Field field, Class<?> annotationClz) {
-        Annotation[] annotations = field.getAnnotations();
+        Annotation[] annotations = field.getDeclaredAnnotations();
         for (Annotation annotation : annotations) {
             if(annotation.getClass().isAssignableFrom(annotationClz)){
                 return true;

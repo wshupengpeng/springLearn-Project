@@ -1,20 +1,26 @@
 package com.spring.environment.config;
 
+import com.spring.environment.param.RefreshField;
 import com.spring.environment.resolver.ValuePlaceHolderResolver;
 import com.spring.util.ReflectUtils;
+import lombok.Data;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.ApplicationEvent;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.event.EventListener;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @creater hpp
@@ -35,6 +41,15 @@ public class RefreshValueBeanPostProcessor implements BeanPostProcessor, Applica
 
     private Environment environment;
 
+    private Map<String, RefreshField> refreshFieldMap = new HashMap<>();
+
+
+    @EventListener
+    public void onRefreshEvent(RefreshEvent refreshEvent) {
+        RefreshField refreshField = refreshFieldMap.get(refreshEvent.getKey());
+        refreshField.updateValue(environment);
+    }
+
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
         // 1 判断当前对象是否含有@value的注解
@@ -45,10 +60,9 @@ public class RefreshValueBeanPostProcessor implements BeanPostProcessor, Applica
                 // 2 如果含有,则将其存入到内存中
                 Value value = declaredField.getDeclaredAnnotation(Value.class);
                 String placeHolder = ValuePlaceHolderResolver.parseValuePlaceHolder(value.value());
+                refreshFieldMap.put(placeHolder, new RefreshField(bean, declaredField, value.value()));
             }
         }
-
-
         return bean;
     }
 
@@ -62,3 +76,5 @@ public class RefreshValueBeanPostProcessor implements BeanPostProcessor, Applica
         this.environment = environment;
     }
 }
+
+
