@@ -1,0 +1,5 @@
+value:
+  dependency:
+    injection:
+      name: 李四
+      addr: 四川
