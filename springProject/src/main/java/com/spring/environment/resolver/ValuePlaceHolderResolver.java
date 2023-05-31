@@ -23,9 +23,9 @@ public class ValuePlaceHolderResolver {
         int mid = name.indexOf(ARGUMENT_MIDDLE);
         int end = name.indexOf(ARGUMENT_END);
         if(mid == -1){
-            return name.substring(begin, end);
+            return name.substring(begin+2, end);
         }
-        return name.substring(begin, mid);
+        return name.substring(begin+2, mid);
     }
 
 }

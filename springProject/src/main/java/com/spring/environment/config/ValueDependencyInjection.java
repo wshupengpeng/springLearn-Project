@@ -3,6 +3,8 @@ package com.spring.environment.config;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
+import lombok.Data;
 
 import javax.annotation.PostConstruct;
 
@@ -11,8 +13,10 @@ import javax.annotation.PostConstruct;
  * @Date 2023/5/15-22:39
  * @description: 测试@Value注入方式
  */
-@Configuration
+//@Configuration
 @Slf4j
+@Component
+@Data
 public class ValueDependencyInjection {
     @Value("${value.dependency.injection.name}")
     private String name;

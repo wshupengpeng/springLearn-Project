@@ -5,7 +5,10 @@ import com.spring.environment.config.RefreshEvent;
 import com.spring.environment.config.RefreshValueBeanPostProcessor;
 import com.spring.environment.config.ValueDependencyInjection;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.Nullable;
+import org.springframework.beans.TypeConverter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.*;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.env.MapPropertySource;
@@ -14,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -55,5 +59,27 @@ public class RefreshController {
         publisher.publishEvent(new RefreshEvent(new Object(),key));
 
         return JSONObject.toJSONString(valueDependencyInjection);
+    }
+
+    @RequestMapping("/apolloBeanFactory")
+    public String apolloBeanFactory(String placeHolder,String beanName){
+        ConfigurableListableBeanFactory beanFactory = applicationContext.getBeanFactory();
+        String strVal = beanFactory.resolveEmbeddedValue(placeHolder);
+        BeanExpressionResolver beanExpressionResolver = beanFactory.getBeanExpressionResolver();
+        Object stringVal = getStringVal(beanName, beanFactory, strVal, beanExpressionResolver);
+        TypeConverter typeConverter = beanFactory.getTypeConverter();
+        stringVal = typeConverter.convertIfNecessary(stringVal, String.class);
+        return stringVal.toString();
+    }
+
+    @Nullable
+    private Object getStringVal(String beanName, ConfigurableListableBeanFactory beanFactory, String strVal, BeanExpressionResolver beanExpressionResolver) {
+        if(beanExpressionResolver == null){
+            return strVal;
+        }else{
+            BeanDefinition beanDefinition = beanFactory.containsBean(beanName) ? beanFactory.getMergedBeanDefinition(beanName) : null;
+            Scope scope = beanDefinition != null ? beanFactory.getRegisteredScope(beanDefinition.getScope()) : null;
+            return beanFactory.getBeanExpressionResolver().evaluate(strVal, new BeanExpressionContext(beanFactory, scope));
+        }
     }
 }

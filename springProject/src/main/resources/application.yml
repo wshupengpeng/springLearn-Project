@@ -20,6 +20,5 @@ value:
     injection:
       name: 张三
       addr: 河南
-value:
   name: 张三
   age: 12
