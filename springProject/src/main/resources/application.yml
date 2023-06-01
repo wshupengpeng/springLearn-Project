@@ -1,10 +1,14 @@
 spring:
+  application:
+    name: apollo-hpp
   datasource:
     druid:
       url: jdbc:mysql://localhost:3306/mydatabase?useSSL=false&serverTimezone=UTC
       username: root
       password: root
       driver-class-name: com.mysql.cj.jdbc.Driver
+server:
+  port: 8777
 #logging:
 #  level:
 #    org:
@@ -18,7 +22,15 @@ prefix-app:
 value:
   dependency:
     injection:
-      name: 张三
+      name: 历史
       addr: 河南
   name: 张三
   age: 12
+apollo:
+  meta: http://localhost:8080
+  bootstrap:
+    enabled: true
+    namespaces: TEST2.hppnamespace
+#  configService: http://config-service-url:port
+app:
+  id: hpp
