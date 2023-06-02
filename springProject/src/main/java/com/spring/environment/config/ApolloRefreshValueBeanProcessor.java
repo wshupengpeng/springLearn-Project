@@ -29,30 +29,34 @@ import java.util.Properties;
  */
 @Component
 @Slf4j
-public class ApolloRefreshValueBeanProcessor implements BeanFactoryPostProcessor, EnvironmentAware {
+public class ApolloRefreshValueBeanProcessor{
+//        implements BeanFactoryPostProcessor, EnvironmentAware {
 
     private static final String APOLLO_MOCK_PROPERTY = "apollo_mock_property";
 
     private CompositePropertySource composite = new CompositePropertySource(APOLLO_MOCK_PROPERTY);
 
+    @Autowired
     private ConfigurableEnvironment environment;
 
     @Autowired
     private ApolloRefreshListener apolloRefreshListener;
 
-    @Override
-    public void setEnvironment(Environment environment) {
-        this.environment = (ConfigurableEnvironment) environment;
-    }
-
-    @Override
-    public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
-        // 1 添加propertysource
-        environment.getPropertySources().addFirst(composite);
-    }
+//    @Override
+//    public void setEnvironment(Environment environment) {
+//        this.environment = (ConfigurableEnvironment) environment;
+//    }
+//
+//    @Override
+//    public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
+//        // 1 添加propertysource
+//        environment.getPropertySources().addFirst(composite);
+//    }
 
     @PostConstruct
     public void registerListener(){
+        // 1 添加propertysource
+        environment.getPropertySources().addFirst(composite);
         // 2 注册监听器
         apolloRefreshListener.setComposite(composite);
         log.info("register listener success");

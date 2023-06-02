@@ -1,8 +1,12 @@
 package com.spring.environment.listener;
 
+import com.spring.environment.config.RefreshEvent;
 import com.spring.environment.event.ApolloRefreshEvent;
+import com.spring.environment.param.RefreshField;
 import lombok.Data;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEvent;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.env.CompositePropertySource;
@@ -25,6 +29,9 @@ import java.util.Properties;
 public class ApolloRefreshListener {
 
     private CompositePropertySource composite;
+
+    @Autowired
+    private ApplicationEventPublisher publisher;
 
     //    public ApolloRefreshListener(CompositePropertySource composite) {
 //        this.composite = composite;
@@ -51,6 +58,9 @@ public class ApolloRefreshListener {
         }else{
             composite.addPropertySource(propertySource);
         }
+
+        // 刷新properties
+        publisher.publishEvent(new RefreshEvent(new Object(),name));
 
     }
 

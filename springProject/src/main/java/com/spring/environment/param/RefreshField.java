@@ -45,7 +45,8 @@ public class RefreshField {
         if(!accessible){
             field.setAccessible(Boolean.TRUE);
         }
-        String updateVal = propertyPlaceholderHelper.replacePlaceholders(value, environment::getProperty);
+        String placeHolder = String.format("%s%s%s","${",value,"}");
+        String updateVal = propertyPlaceholderHelper.replacePlaceholders(placeHolder, environment::getProperty);
         log.info("refresh value successfully,newValue：{},key:{}", updateVal, value);
         try {
             if(field.getType() == String.class){
