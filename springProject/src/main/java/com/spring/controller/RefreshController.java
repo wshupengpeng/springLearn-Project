@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.spring.environment.config.RefreshEvent;
 import com.spring.environment.config.RefreshValueBeanPostProcessor;
 import com.spring.environment.config.ValueDependencyInjection;
+import com.spring.environment.event.ApolloRefreshEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.beans.TypeConverter;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URLEncoder;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -41,7 +43,16 @@ public class RefreshController {
     @Autowired
     ValueDependencyInjection valueDependencyInjection;
 
+    @RequestMapping("/apolloRefreshEvent")
+    public String apolloRefreshEvent(String key,String value){
+        log.info("refresh before:{}", JSONObject.toJSONString(valueDependencyInjection));
+        Map<String,Object> map = new HashMap<>();
+        map.put(key,value);
+        MapPropertySource mapPropertySource = new MapPropertySource(key, map);
+        publisher.publishEvent(new ApolloRefreshEvent(mapPropertySource));
 
+        return JSONObject.toJSONString(valueDependencyInjection);
+    }
 
     @RequestMapping("/event")
     public String refreshEvent(String key,String value){

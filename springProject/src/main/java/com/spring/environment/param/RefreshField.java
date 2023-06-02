@@ -6,6 +6,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.util.PropertyPlaceholderHelper;
 
 import java.lang.reflect.Field;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @creater hpp
@@ -13,6 +14,7 @@ import java.lang.reflect.Field;
  * @description:
  */
 @Data
+@Slf4j
 public class RefreshField {
     private static PropertyPlaceholderHelper propertyPlaceholderHelper = new PropertyPlaceholderHelper("${", "}",
             ":", true);
@@ -44,6 +46,7 @@ public class RefreshField {
             field.setAccessible(Boolean.TRUE);
         }
         String updateVal = propertyPlaceholderHelper.replacePlaceholders(value, environment::getProperty);
+        log.info("refresh value successfully,newValue：{},key:{}", updateVal, value);
         try {
             if(field.getType() == String.class){
                 field.set(bean, updateVal);

@@ -1,9 +1,11 @@
 package com.spring.environment.config;
 
 import com.spring.environment.param.RefreshField;
+import com.spring.environment.register.RefreshFieldRegistry;
 import com.spring.environment.resolver.ValuePlaceHolderResolver;
 import com.spring.util.ReflectUtils;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,6 +21,7 @@ import org.springframework.stereotype.Component;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,6 +35,7 @@ import java.util.Map;
  *  3 提供refresh接口,可以用于热替换对象
  */
 @Component
+@Slf4j
 public class RefreshValueBeanPostProcessor implements BeanPostProcessor, ApplicationContextAware, EnvironmentAware {
 
 //    @Autowired
@@ -41,13 +45,16 @@ public class RefreshValueBeanPostProcessor implements BeanPostProcessor, Applica
 
     private Environment environment;
 
-    private Map<String, RefreshField> refreshFieldMap = new HashMap<>();
-
+//    private Map<String, RefreshField> refreshFieldMap = new HashMap<>();
+    @Autowired
+    private RefreshFieldRegistry registry;
 
     @EventListener
     public void onRefreshEvent(RefreshEvent refreshEvent) {
-        RefreshField refreshField = refreshFieldMap.get(refreshEvent.getKey());
-        refreshField.updateValue(environment);
+        Collection<RefreshField> refreshFields = registry.get(refreshEvent.getKey());
+        for (RefreshField refreshField : refreshFields) {
+            refreshField.updateValue(environment);
+        }
     }
 
     @Override
@@ -60,7 +67,8 @@ public class RefreshValueBeanPostProcessor implements BeanPostProcessor, Applica
                 // 2 如果含有,则将其存入到内存中
                 Value value = declaredField.getDeclaredAnnotation(Value.class);
                 String placeHolder = ValuePlaceHolderResolver.parseValuePlaceHolder(value.value());
-                refreshFieldMap.put(placeHolder, new RefreshField(bean, declaredField, value.value()));
+                registry.register(new RefreshField(bean, declaredField, placeHolder));
+//                refreshFieldMap.put(placeHolder, new RefreshField(bean, declaredField, value.value()));
             }
         }
         return bean;
