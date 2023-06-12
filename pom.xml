@@ -23,6 +23,7 @@
         <module>WebSocketProject</module>
         <module>EasyExcelDemo</module>
         <module>poi-project</module>
+        <module>webservice</module>
     </modules>
 
     <properties>
