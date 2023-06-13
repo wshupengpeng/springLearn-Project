@@ -25,17 +25,17 @@ public class WebServiceConfig {
                 .setReadTimeout(Duration.ofSeconds(2))
                 .build();
         WebServiceTemplate template = builder.messageSenders(sender).build();
-        template.setMarshaller(marshaller());
+//        template.setMarshaller(marshaller());
         return template;
     }
 
-    @Bean
-    public Jaxb2Marshaller marshaller() {
-        Jaxb2Marshaller marshaller = new Jaxb2Marshaller();
-        // this is the package name specified in the <generatePackage> specified in
-        // pom.xml
-        marshaller.setContextPath("webservice.dto.PmsStandardDto");
-        return marshaller;
-    }
+//    @Bean
+//    public Jaxb2Marshaller marshaller() {
+//        Jaxb2Marshaller marshaller = new Jaxb2Marshaller();
+//        // this is the package name specified in the <generatePackage> specified in
+//        // pom.xml
+//        marshaller.setContextPath("webservice.dto.PmsStandardDto");
+//        return marshaller;
+//    }
 
 }

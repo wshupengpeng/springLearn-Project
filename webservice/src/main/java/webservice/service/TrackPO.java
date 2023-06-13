@@ -9,6 +9,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.datatype.XMLGregorianCalendar;
+import java.util.Date;
 
 
 /**
@@ -88,7 +89,7 @@ public class TrackPO
 
     @XmlElement(nillable = true)
     @XmlSchemaType(name = "date")
-    protected XMLGregorianCalendar arrivalEstimatedTime = new XMLGregorianCalendarImpl();
+    protected Date arrivalEstimatedTime = new Date();
     @XmlElement(nillable = true)
     protected String cartonNumber = "";
     @XmlElement(nillable = true)
@@ -107,7 +108,7 @@ public class TrackPO
     protected String longitude= "";
     @XmlElement(nillable = true)
     @XmlSchemaType(name = "date")
-    protected XMLGregorianCalendar operationDate = new XMLGregorianCalendarImpl();
+    protected Date operationDate = new Date();
     @XmlElement(nillable = true)
     protected String operationInstructions= "";
     @XmlElement(nillable = true)
@@ -147,7 +148,7 @@ public class TrackPO
      *     {@link XMLGregorianCalendar }
      *     
      */
-    public XMLGregorianCalendar getArrivalEstimatedTime() {
+    public Date getArrivalEstimatedTime() {
         return arrivalEstimatedTime;
     }
 
@@ -159,7 +160,7 @@ public class TrackPO
      *     {@link XMLGregorianCalendar }
      *     
      */
-    public void setArrivalEstimatedTime(XMLGregorianCalendar value) {
+    public void setArrivalEstimatedTime(Date value) {
         this.arrivalEstimatedTime = value;
     }
 
@@ -363,7 +364,7 @@ public class TrackPO
      *     {@link XMLGregorianCalendar }
      *     
      */
-    public XMLGregorianCalendar getOperationDate() {
+    public Date getOperationDate() {
         return operationDate;
     }
 
@@ -375,7 +376,7 @@ public class TrackPO
      *     {@link XMLGregorianCalendar }
      *     
      */
-    public void setOperationDate(XMLGregorianCalendar value) {
+    public void setOperationDate(Date value) {
         this.operationDate = value;
     }
 

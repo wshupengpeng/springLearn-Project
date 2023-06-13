@@ -23,4 +23,10 @@ public class CallServiceController {
         PmsStandardDto pmsStandardDto = new PmsStandardDto();
         return pmsService.pmsStandardLogisticsSyn(pmsStandardDto);
     }
+
+
+    @RequestMapping("/testMethod")
+    public String testMethod(String startTime,String endTime) {
+        return startTime + " :" + endTime;
+    }
 }
