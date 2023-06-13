@@ -47,12 +47,6 @@ public class PmsService {
     }
 
     public static void main(String[] args) throws PmsStandardLogisticsSynException_Exception {
-
-        LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
-        List<Logger> loggerList = loggerContext.getLoggerList();
-        loggerList.forEach(logger -> {
-            logger.setLevel(Level.DEBUG);
-        });
         PmsStandardLogisticsSyn pmsStandardLogisticsSyn = new PmsStandardLogisticsSyn();
         TrackPO trackPO = new TrackPO();
 //        trackPO.setArrivalEstimatedTime(new XMLGregorianCalendarImpl());
