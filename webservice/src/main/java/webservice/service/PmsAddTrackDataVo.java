@@ -1,12 +1,15 @@
 
 package webservice.service;
 
+import lombok.Data;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.datatype.XMLGregorianCalendar;
+import java.util.Date;
 
 
 /**
@@ -38,111 +41,17 @@ import javax.xml.datatype.XMLGregorianCalendar;
     "success",
     "trackingNumber"
 })
+@Data
 public class PmsAddTrackDataVo {
 
     @XmlElement(nillable = true)
     @XmlSchemaType(name = "date")
-    protected XMLGregorianCalendar operationDate;
+    protected String operationDate;
     @XmlElement(nillable = true)
     protected String reason;
     protected Boolean success;
     @XmlElement(nillable = true)
     protected String trackingNumber;
 
-    /**
-     * 获取operationDate属性的值。
-     * 
-     * @return
-     *     possible object is
-     *     {@link XMLGregorianCalendar }
-     *     
-     */
-    public XMLGregorianCalendar getOperationDate() {
-        return operationDate;
-    }
-
-    /**
-     * 设置operationDate属性的值。
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link XMLGregorianCalendar }
-     *     
-     */
-    public void setOperationDate(XMLGregorianCalendar value) {
-        this.operationDate = value;
-    }
-
-    /**
-     * 获取reason属性的值。
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getReason() {
-        return reason;
-    }
-
-    /**
-     * 设置reason属性的值。
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setReason(String value) {
-        this.reason = value;
-    }
-
-    /**
-     * 获取success属性的值。
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
-     */
-    public Boolean isSuccess() {
-        return success;
-    }
-
-    /**
-     * 设置success属性的值。
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
-     */
-    public void setSuccess(Boolean value) {
-        this.success = value;
-    }
-
-    /**
-     * 获取trackingNumber属性的值。
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getTrackingNumber() {
-        return trackingNumber;
-    }
-
-    /**
-     * 设置trackingNumber属性的值。
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setTrackingNumber(String value) {
-        this.trackingNumber = value;
-    }
 
 }
