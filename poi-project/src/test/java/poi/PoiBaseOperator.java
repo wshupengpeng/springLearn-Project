@@ -147,7 +147,7 @@ public class PoiBaseOperator {
     public void mergeTable(){
         XWPFTable table = doc.createTable(6,6);
         // 设置行距
-        table.setWidthType(TableWidthType.AUTO);
+//        table.setWidthType(TableWidthType.AUTO);
         TableTools.widthTable(table, MiniTableRenderData.WIDTH_A4_FULL, 5);
         // 测试单元格合并，必须先restart 再 continue，否则合并不生效
 //        XWPFTableCell cell = table.getRow(0).getCell(0);
