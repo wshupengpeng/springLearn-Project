@@ -62,7 +62,6 @@ public class PmsService {
         String key = helloWorld.getKey("1,2,3");
         System.out.println("webService end");
         TrackPO trackPO = new TrackPO();
-        trackPO.setArrivalEstimatedTime(new Date());
         trackPO.setCartonNumber("12314");
         trackPO.setComeFrom("12314");
         trackPO.setDescr("12314");
@@ -78,7 +77,6 @@ public class PmsService {
         trackPO.setToStore("12314");
         trackPO.setOperatorName("12314");
         trackPO.setOperatorPhone("12314");
-        trackPO.setOperationDate(new Date());
         trackPO.setReceiver("12314");
         trackPO.setWaybill("12314");
         trackPO.setTransportWay("12314");
@@ -88,7 +86,7 @@ public class PmsService {
 //        trackPO.setWaybill("");
 //        trackPO.setWaybill("");
         PmsStandardLogisticsSynPortType pmsStandardLogisticsSynHttpSoap11Endpoint = pmsStandardLogisticsSyn.getPmsStandardLogisticsSynHttpSoap11Endpoint();
-        String key = pmsStandardLogisticsSyn.getPmsStandardLogisticsSynHttpSoap11Endpoint().getKey(String.join(",", "WL001", "顺丰物流", System.currentTimeMillis() + ""));
+        key = pmsStandardLogisticsSyn.getPmsStandardLogisticsSynHttpSoap11Endpoint().getKey(String.join(",", "WL001", "顺丰物流", System.currentTimeMillis() + ""));
         System.out.println("key:"+key);
         String request = JSONObject.toJSONString(new TrackPO());
         System.out.println(request);
