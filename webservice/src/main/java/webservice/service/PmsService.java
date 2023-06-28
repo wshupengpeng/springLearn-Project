@@ -19,6 +19,7 @@ import javax.xml.ws.Service;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -49,28 +50,28 @@ public class PmsService {
     public static void main(String[] args) throws PmsStandardLogisticsSynException_Exception {
         PmsStandardLogisticsSyn pmsStandardLogisticsSyn = new PmsStandardLogisticsSyn();
         TrackPO trackPO = new TrackPO();
-//        trackPO.setArrivalEstimatedTime(new XMLGregorianCalendarImpl());
-        trackPO.setCartonNumber("");
-        trackPO.setComeFrom("");
-        trackPO.setDescr("");
-        trackPO.setGoodsWeight("");
-        trackPO.setGoodsVolume("");
-        trackPO.setLatitude("");
-        trackPO.setLongitude("");
-        trackPO.setOperationInstructions("");
-        trackPO.setStatus("");
-        trackPO.setReceiptCity("");
-        trackPO.setSendCity("");
-        trackPO.setSender("");
-        trackPO.setToStore("");
-        trackPO.setOperatorName("");
-        trackPO.setOperatorPhone("");
-//        trackPO.setOperationDate(new XMLGregorianCalendarImpl());
-        trackPO.setReceiver("");
-        trackPO.setWaybill("");
-        trackPO.setTransportWay("");
-        trackPO.setPutForwardWay("");
-        trackPO.setProvincesCounties("");
+        trackPO.setArrivalEstimatedTime(new Date());
+        trackPO.setCartonNumber("12314");
+        trackPO.setComeFrom("12314");
+        trackPO.setDescr("12314");
+        trackPO.setGoodsWeight("12314");
+        trackPO.setGoodsVolume("12314");
+        trackPO.setLatitude("12314");
+        trackPO.setLongitude("12314");
+        trackPO.setOperationInstructions("12314");
+        trackPO.setStatus("12314");
+        trackPO.setReceiptCity("12314");
+        trackPO.setSendCity("12314");
+        trackPO.setSender("12314");
+        trackPO.setToStore("12314");
+        trackPO.setOperatorName("12314");
+        trackPO.setOperatorPhone("12314");
+        trackPO.setOperationDate(new Date());
+        trackPO.setReceiver("12314");
+        trackPO.setWaybill("12314");
+        trackPO.setTransportWay("12314");
+        trackPO.setPutForwardWay("12314");
+        trackPO.setProvincesCounties("12314");
 //        trackPO.setWaybill("");
 //        trackPO.setWaybill("");
 //        trackPO.setWaybill("");
@@ -79,8 +80,9 @@ public class PmsService {
         System.out.println("key:"+key);
         String request = JSONObject.toJSONString(new TrackPO());
         System.out.println(request);
-        PmsAddTrackDataVo pmsAddTrackDataVo = pmsStandardLogisticsSyn.getPmsStandardLogisticsSynHttpSoap11Endpoint()
-                .addTrackData("WL001", "顺丰物流", key, new TrackPO());
+        PmsAddTrackDataVo pmsAddTrackDataVo = pmsStandardLogisticsSyn
+                .getPmsStandardLogisticsSynHttpSoap11Endpoint()
+                .addTrackData("WL001", "顺丰物流", key, trackPO);
 
 
 //        PmsAddTrackDataListVo pmsAddTrackDataListVo = pmsStandardLogisticsSyn.getPmsStandardLogisticsSynHttpSoap11Endpoint()
