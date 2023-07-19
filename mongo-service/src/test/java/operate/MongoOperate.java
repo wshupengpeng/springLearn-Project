@@ -3,12 +3,18 @@ package operate;
 import com.mongo.MongoSpringApplication;
 import com.mongo.entity.Book;
 import com.mongo.entity.DynamicData;
+import lombok.extern.slf4j.Slf4j;
+import org.bson.Document;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.index.IndexField;
+import org.springframework.data.mongodb.core.index.IndexInfo;
+import org.springframework.data.mongodb.core.index.IndexOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
@@ -25,6 +31,7 @@ import java.util.List;
  */
 @SpringBootTest(classes = MongoSpringApplication.class)
 @RunWith(SpringRunner.class)
+@Slf4j
 public class MongoOperate {
 
     @Autowired
@@ -80,8 +87,26 @@ public class MongoOperate {
         List<DynamicData> all = mongoTemplate.findAll(DynamicData.class);
 
         // 条件查询
-        Query query = new Query(Criteria.where(""));
+        Query query = new Query(Criteria.where("no").is("测试编号0"));
 
+        List<DynamicData> dynamicData = mongoTemplate.find(query, DynamicData.class);
+
+
+        IndexOperations indexOps = mongoTemplate.indexOps(DynamicData.class);
+
+        List<IndexInfo> indexInfo = indexOps.getIndexInfo();
+
+        for (IndexInfo info : indexInfo) {
+            String name = info.getName();
+            List<IndexField> indexFields = info.getIndexFields();
+            for (IndexField indexField : indexFields) {
+                Sort.Direction direction = indexField.getDirection();
+                String key = indexField.getKey();
+                log.info("direction:{},key:{}", direction.name(), key);
+            }
+//            Document document = info.getCollation().get();
+            log.info("name:{}",name);
+        }
     }
 
 }
