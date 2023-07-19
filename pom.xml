@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.1.5.RELEASE</version>
+        <version>2.2.6.RELEASE</version>
     </parent>
     <groupId>org.example</groupId>
     <artifactId>workDemo</artifactId>
@@ -24,6 +24,8 @@
         <module>EasyExcelDemo</module>
         <module>poi-project</module>
         <module>webservice</module>
+        <module>jdk-proxy</module>
+        <module>mongo-service</module>
     </modules>
 
     <properties>

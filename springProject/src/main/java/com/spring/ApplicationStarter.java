@@ -1,6 +1,7 @@
 package com.spring;
 
 import com.spring.config.AutoProperties;
+import lombok.Data;
 import org.junit.Test;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,30 +22,46 @@ public class ApplicationStarter {
     private AutoProperties autoProperties;
 
     public static void main(String[] args) {
-        new SpringApplication().run(ApplicationStarter.class);
+        SpringApplication.run(ApplicationStarter.class);
 
     }
 
     @PostConstruct
-    public void test(){
+    public void test() {
         System.out.println("name:" + autoProperties.getName());
+    }
+    @Data
+    class CpbmPullOrderResponse{
+        int pageCount;
+
     }
 
     @Test
     public void testStopWatch() {
-        StopWatch stopWatch = new StopWatch();
-        stopWatch.start();
-        try {
-            Thread.sleep(1000l);
-            stopWatch.stop();
-            System.out.println("stop watch total:" + stopWatch.getTotalTimeMillis());
-            stopWatch.start();
-            Thread.sleep(1000l);
-            stopWatch.stop();
-            System.out.println("stop watch total:" + stopWatch.getTotalTimeMillis());
-        } catch (Exception e) {
+        CpbmPullOrderResponse cpbmPullOrderResponse = new CpbmPullOrderResponse();
+        int batchJobNum = 1000;
 
-        }
+
+//        int jobNum = (int) Math.ceil(cpbmPullOrderResponse.getPageCount() / 1000);
+
+        // ======== 分割线 ========
+        int jobNum = (int) Math.ceil(cpbmPullOrderResponse.getPageCount() / 1000d);
+
+
+        System.out.println(jobNum);
+//        StopWatch stopWatch = new StopWatch();
+//        stopWatch.start();
+//        try {
+//            Thread.sleep(1000L);
+//            stopWatch.stop();
+//            System.out.println("stop watch total:" + stopWatch.getTotalTimeMillis());
+//            stopWatch.start();
+//            Thread.sleep(1000L);
+//            stopWatch.stop();
+//            System.out.println("stop watch total:" + stopWatch.getTotalTimeMillis());
+//        } catch (Exception e) {
+//
+//        }
     }
 
 }
