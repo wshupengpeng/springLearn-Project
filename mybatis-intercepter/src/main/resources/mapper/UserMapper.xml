@@ -4,4 +4,11 @@
     <select id="selectDiffById" resultType="com.mybatis.test.entity.User">
         select * from t_user where id = #{id}
     </select>
+
+
+    <update id="updateBatchById">
+        <foreach collection="list" item="item" >
+            update t_user set  user_name = #{item.userName},remark = #{item.remark} where id = #{item.id};
+        </foreach>
+    </update>
 </mapper>

@@ -3,7 +3,7 @@ spring:
     name: apollo-hpp
   datasource:
     druid:
-      url: jdbc:mysql://localhost:3306/mydatabase?useSSL=false&serverTimezone=UTC
+      url: jdbc:mysql://localhost:3306/mydatabase?useSSL=false&serverTimezone=UTC&allowMultiQueries=true
       username: root
       password: root
       driver-class-name: com.mysql.cj.jdbc.Driver

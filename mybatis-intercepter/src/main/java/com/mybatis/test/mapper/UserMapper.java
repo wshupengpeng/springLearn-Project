@@ -5,6 +5,8 @@ import com.mybatis.test.entity.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.List;
+
 /**
  * <p>
  *  Mapper 接口
@@ -18,5 +20,7 @@ public interface UserMapper extends BaseMapper<User> {
 
 
     User selectDiffById(@RequestParam("id") Integer id);
+
+    int updateBatchById(List<User> list);
 
 }

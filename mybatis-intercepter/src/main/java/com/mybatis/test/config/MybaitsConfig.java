@@ -22,8 +22,8 @@ public class MybaitsConfig {
         MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
         //向Mybatis过滤器链中添加分页拦截器
         interceptor.addInnerInterceptor(new PaginationInnerInterceptor(DbType.MYSQL));
-        interceptor.addInnerInterceptor(logIntercepter);
-        interceptor.addInnerInterceptor(new DataChangeRecorderInnerInterceptor());
+//        interceptor.addInnerInterceptor(logIntercepter);
+//        interceptor.addInnerInterceptor(new DataChangeRecorderInnerInterceptor());
         //还可以添加其他的拦截器
         return interceptor;
     }
