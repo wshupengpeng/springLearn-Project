@@ -8,7 +8,7 @@ public class UriComponetTest {
     @Test
     public void componetTest(){
         UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromHttpUrl("http://localhost");
-        uriComponentsBuilder.queryParam("test",null);
+        uriComponentsBuilder.queryParam("test","123");
         System.out.println(uriComponentsBuilder.toUriString());
     }
 }

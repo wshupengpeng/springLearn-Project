@@ -34,3 +34,5 @@ apollo:
 #  configService: http://config-service-url:port
 app:
   id: hpp
+logging:
+  level: error

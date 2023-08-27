@@ -1,7 +1,7 @@
 package com.mybatis.test.listener;
 
 import com.alibaba.fastjson.JSONObject;
-import com.mybatis.test.entity.OpeateResult;
+import com.mybatis.test.entity.OperationResult;
 import com.mybatis.test.event.LogEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
@@ -21,7 +21,7 @@ public class LogListener {
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     @Async
     public void consumerLog(LogEvent logEvent) {
-        OpeateResult opeateResult = (OpeateResult) logEvent.getSource();
+        OperationResult opeateResult = (OperationResult) logEvent.getSource();
         log.info("consumer log :{}", JSONObject.toJSONString(opeateResult));
     }
 
