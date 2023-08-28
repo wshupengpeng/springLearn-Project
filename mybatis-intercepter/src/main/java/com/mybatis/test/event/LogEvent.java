@@ -1,7 +1,6 @@
 package com.mybatis.test.event;
 
-import com.mybatis.test.entity.OpeateResult;
-import lombok.Data;
+import com.mybatis.test.entity.OperationResult;
 import org.springframework.context.ApplicationEvent;
 
 /**
@@ -11,7 +10,7 @@ import org.springframework.context.ApplicationEvent;
  */
 public class LogEvent extends ApplicationEvent {
 
-    public LogEvent(OpeateResult opeateResult) {
+    public LogEvent(OperationResult opeateResult) {
         super(opeateResult);
     }
 

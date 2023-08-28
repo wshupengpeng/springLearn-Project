@@ -1,0 +1,43 @@
+{
+  "groups": [
+    {
+      "name": "log",
+      "type": "com.log.autoconfigure.LogMonitorProperties",
+      "sourceType": "com.log.autoconfigure.LogMonitorProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "log.monitor.level",
+      "type": "com.log.LogMonitorLevelEnum",
+      "sourceType": "com.log.autoconfigure.LogMonitorProperties"
+    }
+  ],
+  "hints": [
+    {
+      "name": "log.monitor.level",
+      "values": [
+        {
+          "value":"all",
+          "description" : "Choose All database record"
+        },
+        {
+          "value":"insert",
+          "description" : "Choose insert database record"
+        },
+        {
+          "value":"update",
+          "description" : "Choose update database record"
+        },
+        {
+          "value":"delete",
+          "description" : "Choose delete database record"
+        },
+        {
+          "value":"select",
+          "description" : "Choose select database record"
+        }
+      ]
+    }
+  ]
+}

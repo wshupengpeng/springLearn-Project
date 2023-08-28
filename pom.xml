@@ -27,6 +27,7 @@
         <module>jdk-proxy</module>
         <module>mongo-service</module>
         <module>mybatis-intercepter</module>
+        <module>log-monitor-spring-boot-stater</module>
     </modules>
 
     <properties>
