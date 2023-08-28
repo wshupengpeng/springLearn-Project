@@ -26,6 +26,7 @@
         <module>webservice</module>
         <module>jdk-proxy</module>
         <module>mongo-service</module>
+        <module>mybatis-intercepter</module>
     </modules>
 
     <properties>

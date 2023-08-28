@@ -28,7 +28,7 @@ public class UserController {
     @Transactional
     public void insertUser(@RequestParam String name) {
         User user = new User();
-        user.setId(1l);
+//        user.setId(1l);
         user.setUserName(name);
         iUserService.update(user);
         iUserService.save(user);
