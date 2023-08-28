@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.plugins.inner.DataChangeRecorderInnerI
 import com.baomidou.mybatisplus.extension.plugins.inner.InnerInterceptor;
 import com.mybatis.test.entity.OpeateResult;
 //import com.mybatis.test.entity.OperationResult;
+import com.mybatis.test.entity.OperationResult;
 import com.mybatis.test.event.LogEvent;
 import com.mybatis.test.mapper.OpeateResultMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -124,7 +125,7 @@ public class LogIntercepter implements InnerInterceptor{
 
 
     private OpeateResult processInsert(Insert statement, BoundSql boundSql) {
-        OpeateResult operationResult = new OpeateResult();
+        OperationResult operationResult = new OperationResult();
         List<Column> columns = statement.getColumns();
         log.info("insert table is :{}", statement.getTable().getName());
         for (Column column : columns) {
@@ -135,7 +136,7 @@ public class LogIntercepter implements InnerInterceptor{
 //            int i = 1/0;
             operationResult.setOperate("insert");
             operationResult.setTableName(statement.getTable().getName());
-            operationResult.setField(statement.getTable().getName());
+            operationResult.setOperateDetail(statement.getTable().getName());
             publisher.publishEvent(new LogEvent(operationResult));
 //            opeateResultMapper.insert(operationResult);
 

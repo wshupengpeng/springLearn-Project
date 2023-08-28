@@ -8,14 +8,16 @@
   ],
   "properties": [
     {
-      "name": "log.monitor.level",
+      "name": "log.monitor.levels",
       "type": "com.log.LogMonitorLevelEnum",
-      "sourceType": "com.log.autoconfigure.LogMonitorProperties"
+      "sourceType": "com.log.autoconfigure.LogMonitorProperties",
+      "defaultValue": ["all"]
     }
   ],
+
   "hints": [
     {
-      "name": "log.monitor.level",
+      "name": "log.monitor.levels",
       "values": [
         {
           "value":"all",
