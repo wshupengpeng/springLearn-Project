@@ -1,4 +1,7 @@
 spring:
+  data:
+    cassandra:
+      read-timeout: 1s
   application:
     name: mybatis-intercepter
   datasource:
@@ -11,8 +14,16 @@ spring:
     username: root
     password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
+  mvc:
+    async:
+      request-timeout: 20S
 server:
+  tomcat:
+    connection-timeout: 1000
   port: 8080
+  servlet:
+    session:
+      timeout: 60s
 #logging:
 #  level:
 #    org:

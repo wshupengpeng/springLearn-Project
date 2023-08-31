@@ -67,6 +67,20 @@ public class MybatisPlusIntercepterController {
     }
 
 
+    @RequestMapping("/test/timeout")
+    @Transactional
+    public R timeOutTest(@RequestParam("timeOut") Long timeOut) {
+
+        try {
+            Thread.sleep(timeOut);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return R.success();
+    }
+
+
 
 
     @RequestMapping("/updateBatchTestMybatisPlusIntercepter")
