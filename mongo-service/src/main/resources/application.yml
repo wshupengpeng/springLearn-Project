@@ -12,3 +12,9 @@ spring:
       port: 27017
       # 连接数据库
       database: test
+  datasource:
+    druid:
+      url: jdbc:mysql://localhost:3306/mydatabase?useSSL=false&serverTimezone=UTC
+      username: root
+      password: root
+      driver-class-name: com.mysql.cj.jdbc.Driver
