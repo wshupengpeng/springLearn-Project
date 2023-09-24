@@ -28,6 +28,8 @@
         <module>mongo-service</module>
         <module>mybatis-intercepter</module>
         <module>log-monitor-spring-boot-stater</module>
+        <module>file-template-generator</module>
+        <module>file-template-generator</module>
     </modules>
 
     <properties>
