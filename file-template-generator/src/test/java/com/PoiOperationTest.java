@@ -1,4 +1,4 @@
-package java.com;
+package com;
 
 import com.deepoove.poi.XWPFTemplate;
 import com.deepoove.poi.config.Configure;
@@ -17,8 +17,10 @@ import com.sf.vsolution.hx.hanzt.template.generator.utils.PoiTlUtils;
 import com.sf.vsolution.hx.hanzt.template.html.common.PoiCommon;
 import lombok.Data;
 import org.apache.poi.xwpf.model.XWPFHeaderFooterPolicy;
+import org.apache.poi.xwpf.usermodel.*;
 import org.apache.xmlbeans.impl.xb.xmlschema.SpaceAttribute;
 import org.junit.Test;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.*;
 
 import java.io.File;
 import java.io.FileOutputStream;
