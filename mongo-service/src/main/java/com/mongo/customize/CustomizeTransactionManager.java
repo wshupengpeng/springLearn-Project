@@ -15,6 +15,7 @@ import org.springframework.transaction.support.DefaultTransactionStatus;
 import javax.annotation.Resource;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -30,6 +31,16 @@ public class CustomizeTransactionManager implements PlatformTransactionManager {
 
     @Resource(name = "dataSourceTransaction")
     private DataSourceTransactionManager dataSourceTransactionManager;
+
+
+    private List<PlatformTransactionManager> transactionManagers;
+
+
+    public CustomizeTransactionManager(PlatformTransactionManager... transactionManagers){
+
+    }
+
+
 
     @Override
     public TransactionStatus getTransaction(TransactionDefinition transactionDefinition) throws TransactionException {
