@@ -1,4 +1,4 @@
-package java.com;
+package com;
 
 import com.alibaba.fastjson.JSONObject;
 import com.sf.vsolution.hx.hanzt.template.generator.utils.PoiTlUtils;

@@ -2,6 +2,7 @@ package com.sf.vsolution.hx.hanzt.template.html.param;
 
 import com.sf.vsolution.hx.hanzt.template.html.common.PoiCommon;
 import lombok.Data;
+import org.apache.poi.xwpf.usermodel.*;
 import org.apache.xmlbeans.XmlCursor;
 import org.jsoup.nodes.Node;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTPPr;
