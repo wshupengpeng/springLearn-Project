@@ -13,7 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @creater hpp
@@ -79,7 +80,31 @@ public class MybatisPlusIntercepterController {
 
         return R.success();
     }
+    public void merge(int[] nums1, int m, int[] nums2, int n) {
+        int p1 = m-1;
+        int p2 = n-1;
+        int cur;
+        int tail = m + n - 1;
 
+        while(p1 >= 0 || p2 > 0){
+            if(p1 == -1){
+                cur = nums2[p2--];
+            }else if(p2 == -1){
+                cur = nums1[p1--];
+            }else if(nums1[p1] > nums2[p2]){
+                cur = nums1[p1--];
+            }else{
+                cur = nums2[p2--];
+            }
+            nums1[tail--] = cur;
+        }
+
+    }
+
+    public static void main(String[] args) {
+        MybatisPlusIntercepterController mybatisPlusIntercepterController = new MybatisPlusIntercepterController();
+        mybatisPlusIntercepterController.merge(new int[1],0,new int[]{1},1);
+    }
 
 
 
